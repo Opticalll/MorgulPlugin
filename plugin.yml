@@ -1,0 +1,15 @@
+name: MorgulPlugin
+main: cz.winop.morgulplugin.MorgulPlugin
+version: 0.01
+
+commands:
+   info:
+      description: This is a info command.
+      usage: /<command>
+      permission: MorgulPlugin.info
+      permission-message: You don't have permission for MorgulPlugin.
+   login:
+      description: Login command.
+      usage: /<command> [password]
+      permission: MorgulPlugin.login
+      permission-message: You don't have permission for MorgulPlugin.
