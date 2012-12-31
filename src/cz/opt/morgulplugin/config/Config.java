@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import cz.opt.morgulplugin.MorgulPlugin;
@@ -15,7 +14,7 @@ public class Config
 {
 	static final String CONFIG_FILE = "Morgul/config/morgulConfig.conf";
 
-	static Map<String, Object> configMap = null;
+	static HashMap<String, HashMap<String, String>> configMap = null;
 
 	public static boolean loadConfig()
 	{
@@ -84,12 +83,12 @@ public class Config
 		}
 
 		List<String> strings = inputChunks;
-		Map<String, Object> mapList = new HashMap<String, Object>();
+		HashMap<String, HashMap<String, String>> mapList = new HashMap<String, HashMap<String, String>>();
 		for(int i = 0; i < strings.size(); i++)
 		{
 			String[] lines = strings.get(i).split("\n");
 			String mapName = null;
-			Map<String, String> variableMap = new HashMap<String, String>();
+			HashMap<String, String> variableMap = new HashMap<String, String>();
 			for(int z = 0; z < lines.length; z++)
 			{
 				if(lines[z] != "")
@@ -119,8 +118,7 @@ public class Config
 
 	public static String get(String section, String key)
 	{
-		@SuppressWarnings("unchecked")
-		Map<String, String> tile = (Map<String, String>) configMap.get(section);
+		HashMap<String, String> tile = configMap.get(section);
 		return (String) tile.get(key);
 	}
 }
