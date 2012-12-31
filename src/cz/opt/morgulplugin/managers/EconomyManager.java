@@ -3,6 +3,7 @@ package cz.opt.morgulplugin.managers;
 import org.bukkit.entity.Player;
 
 import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.listener.CommandListener;
 
@@ -47,9 +48,24 @@ public class EconomyManager implements CommandListener
 				{
 					if(PlayerManager.getPlayer(e.getArgs()[3]) == null)
 					{
-						e.getSender().sendMessage("Hrac neni online.");
-						//TODO: sending money to offline users.
-						return true;
+						if(PlayerManager.playerExist(e.getArgs()[3]))
+						{
+							try
+							{
+								PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[2]));
+								modM_coinstoOffline(e.getArgs()[3], Integer.parseInt(e.getArgs()[2]));
+								return true;
+							} catch(NumberFormatException ex) {
+								MorgulPlugin.log(ex.getMessage());
+								e.getSender().sendMessage("Syntaxe je /economy pay [kolik] [komu]");
+								return true;
+							}
+						}
+						else
+						{
+							e.getSender().sendMessage("Hrac neexistuje.");
+							return true;
+						}
 					}
 					else
 					{
@@ -68,6 +84,14 @@ public class EconomyManager implements CommandListener
 			}
 		}
 		return false;
+	}
+	
+	public void modM_coinstoOffline(String name, int sum)
+	{
+		int playerid = PlayerManager.getPlayerId(name);
+		int M_Coins = Integer.parseInt(DataBase.query("Select * from player_accounts WHERE id='" + playerid + "'").get(1).get("morgul_coins"));
+		M_Coins += sum;
+		DataBase.update("UPDATE player_accounts SET morgul_coins='" + M_Coins + "' WHERE id='" + playerid + "'");
 	}
 
 	@Override

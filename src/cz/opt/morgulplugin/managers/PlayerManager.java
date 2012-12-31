@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 
 public class PlayerManager
@@ -28,12 +29,20 @@ public class PlayerManager
 
 	public static int getPlayerId(String name)
 	{
-		return playerMap.get(name).getId();
+		return Integer.parseInt(DataBase.query("SELECT * FROM players WHERE playername='" + name + "'").get(1).get("id"));
 	}
 
 	public static MorgPlayer getPlayer(String name)
 	{
 		return playerMap.get(name);
+	}
+	
+	public static boolean playerExist(String name)
+	{
+		if(DataBase.query("SELECT * FROM players WHERE playername='" + name + "'").keySet().size() > 0)
+			return true;
+		else
+			return false;
 	}
 
 	public static boolean isLoggedIn(String name)

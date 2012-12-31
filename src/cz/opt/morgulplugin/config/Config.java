@@ -1,7 +1,9 @@
 package cz.opt.morgulplugin.config;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,15 @@ public class Config
 				if(conf.createNewFile())
 				{
 					MorgulPlugin.log("Config File Created setup pls MorgulPlugin");
-					//TODO: Write into file Basic configuration.
+					FileWriter fstream = new FileWriter(conf);
+					BufferedWriter bufOut = new BufferedWriter(fstream);
+					
+					Scanner confScan = new Scanner(Config.class.getResourceAsStream("/morgulConfig.yml"));
+					while(confScan.hasNextLine())
+						bufOut.write(confScan.nextLine());
+					
+					confScan.close();
+					bufOut.close();
 				}
 				else
 					MorgulPlugin.log("Config File could not be created.");
