@@ -1,4 +1,4 @@
-package cz.winop.morgulplugin;
+package cz.opt.morgulplugin;
 
 import java.util.logging.Logger;
 
@@ -6,12 +6,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import cz.winop.morgulplugin.config.Config;
-import cz.winop.morgulplugin.database.DataBase;
-import cz.winop.morgulplugin.event.CommandEvent;
-import cz.winop.morgulplugin.managers.CommandManager;
-import cz.winop.morgulplugin.managers.LoginManager;
-import cz.winop.morgulplugin.managers.PlayerManager;
+import cz.opt.morgulplugin.config.Config;
+import cz.opt.morgulplugin.database.DataBase;
+import cz.opt.morgulplugin.entity.MorgPlayer;
+import cz.opt.morgulplugin.event.CommandEvent;
+import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
+import cz.opt.morgulplugin.managers.CommandManager;
+import cz.opt.morgulplugin.managers.EconomyManager;
+import cz.opt.morgulplugin.managers.LoginManager;
+import cz.opt.morgulplugin.managers.PlayerManager;
 
 public final class MorgulPlugin extends JavaPlugin
 {
@@ -42,28 +45,34 @@ public final class MorgulPlugin extends JavaPlugin
 			MorgulPlugin.log("Config Loaded.");	
 			debugMode = Boolean.parseBoolean(Config.get(SECTION, "debugmode"));
 			if(!DataBase.setUp())
+			{
 				MorgulPlugin.log("Database could not be SetUp.");
+				return;
+			}
 			else
 				MorgulPlugin.log("Database SetUp.");
 			PlayerManager.init();
 			MorgulPlugin.log("PlayerManager Init.");
+			MorgPlayer.init();
+			MorgulPlugin.log("MorgulPlayer Init.");
 			CommandManager.init();
 			MorgulPlugin.log("CommandManager Init.");
 			LoginManager.init();
-			MorgulPlugin.log("LoginManaget Init.");
+			MorgulPlugin.log("LoginManager Init.");
+			EconomyManager.init();
+			MorgulPlugin.log("EconomyManager Init.");
 		}	
 	}
 	
 	@Override
 	public void onEnable()
 	{
-		this.getServer().getPluginManager().registerEvents(new PlayerManager(), this);
+		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		CommandManager.sendCommand(new CommandEvent(sender, command, label, args));
-		return true;
+		return CommandManager.sendCommand(new CommandEvent(sender, command, label, args));
 	}
 }

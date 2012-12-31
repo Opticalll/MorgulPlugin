@@ -1,13 +1,14 @@
-package cz.winop.morgulplugin.database;
+package cz.opt.morgulplugin.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
-import cz.winop.morgulplugin.MorgulPlugin;
-import cz.winop.morgulplugin.config.Config;
+import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.config.Config;
 
 public class DataBase
 {
@@ -38,19 +39,29 @@ public class DataBase
 		return true;
 	}
 	
-	public static ResultSet query(String sqlQuery)
+	public static HashMap<Integer, HashMap<String, String>> query(String sqlQuery)
 	{
 		Statement st = null;
 		ResultSet rs = null;
+		HashMap<Integer, HashMap<String, String>> rows = new HashMap<Integer, HashMap<String, String>>();
 		try 
 		{
             st = con.createStatement();
             rs = st.executeQuery(sqlQuery);
+            while(rs.next())
+            {
+            	HashMap<String, String> colums = new HashMap<String, String>();
+            	for(int i = 1; i < rs.getMetaData().getColumnCount() + 1; i++)
+            		colums.put(rs.getMetaData().getColumnName(i), rs.getString(i));
+            	rows.put(rs.getRow(), colums);
+            }
+            rs.close();
+            st.close();
         } catch (SQLException ex) {
 			 MorgulPlugin.log("Database SQL Error: " + ex.getMessage());
 			 return null;
         }
-		return rs;
+		return rows;
 	}
 	
 	public static void update(String sqlQuery)
@@ -60,34 +71,10 @@ public class DataBase
 		{
             st = con.createStatement();
             st.executeUpdate(sqlQuery);
+            st.close();
         } catch (SQLException ex) {
 			 MorgulPlugin.log("Database SQL Error: " + ex.getMessage());
 			 MorgulPlugin.log(sqlQuery);
-        } finally {
-        	try
-			{
-				st.close();
-			} catch (SQLException ex) {
-				MorgulPlugin.log("Database SQL Error: " + ex.getMessage());
-			}
         }
-	}
-	
-	public static int getRowCount(ResultSet set)
-	{
-		int rowCount;
-		try 
-		{
-			int currentRow = set.getRow();    
-			rowCount = set.last() ? set.getRow() : 0;
-			if (currentRow == 0)                      
-				set.beforeFirst();                     
-			else                                      
-				set.absolute(currentRow);
-		} catch (SQLException ex) {
-			MorgulPlugin.log("Database SQL Error: " + ex.getMessage());
-			return 0;
-		}             
-		return rowCount;
 	}
 }

@@ -1,28 +1,26 @@
-package cz.winop.morgulplugin.managers;
+package cz.opt.morgulplugin.managers;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 
-import cz.winop.morgulplugin.MorgulPlugin;
-import cz.winop.morgulplugin.config.Config;
-import cz.winop.morgulplugin.database.DataBase;
-import cz.winop.morgulplugin.event.CommandEvent;
-import cz.winop.morgulplugin.listener.CommandListener;
+import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.config.Config;
+import cz.opt.morgulplugin.database.DataBase;
+import cz.opt.morgulplugin.event.CommandEvent;
+import cz.opt.morgulplugin.listener.CommandListener;
 
-public class LoginManager implements CommandListener, Listener
+public class LoginManager implements CommandListener
 {	
 	private static final String SECTION = "Login";
 	private static int LOGIN_TIMEOUT_SECONDS;
 	private Player logingPlayer;
+	
+	private boolean preLogin = true;
+	private boolean cmdCom = false;
 	
 	public static void init()
 	{
@@ -45,8 +43,7 @@ public class LoginManager implements CommandListener, Listener
 	{
 		logingPlayer = pl;
 		
-		CommandManager.registerPreLoginListener(this);
-		MorgulPlugin.thisPlugin.getServer().getPluginManager().registerEvents(this, MorgulPlugin.thisPlugin);
+		CommandManager.registerListener("login", this);
 		
 		if((PlayerManager.getPlayer(pl.getName()).getLastPlayed() + (LOGIN_TIMEOUT_SECONDS * 1000)) > System.currentTimeMillis())
 		{
@@ -59,37 +56,17 @@ public class LoginManager implements CommandListener, Listener
 	
 	private boolean checkPassword(String pass)
 	{
-		ResultSet rs = null;
-		rs = DataBase.query("SELECT * FROM players WHERE playername='" + logingPlayer.getName() + "'");
-		try
+		HashMap<Integer, HashMap<String, String>> rs = DataBase.query("SELECT * FROM players WHERE playername='" + logingPlayer.getName() + "'");
+		if(rs.get(1).get("pass").isEmpty())
 		{
-			if(rs.next())
-			{
-				if(rs.getString("pass").isEmpty())
-				{
-					setNewPass(pass);
-					logingPlayer.sendMessage("Heslo Nastaveno.");
-					return true;
-				}
-				if(pass.equals(rs.getString("pass")))
-					return true;
-				else
-					return false;
-			}
-			else
-				return false;
-		} catch (SQLException e) {
-			MorgulPlugin.log(e.getMessage());
-			return false;
-		} finally {
-			try
-			{
-				rs.close();
-			} catch (SQLException e)
-			{
-				MorgulPlugin.log("Database SQL Error: " + e.getMessage());
-			}
+			setNewPass(pass);
+			logingPlayer.sendMessage("Heslo Nastaveno.");
+			return true;
 		}
+		if(pass.equals(rs.get(1).get("pass")))
+			return true;
+		else
+			return false;
 	}
 	
 	private void setNewPass(String pass)
@@ -99,19 +76,19 @@ public class LoginManager implements CommandListener, Listener
 	}
 	
 	@Override
-	public void onCommand(CommandEvent e)
+	public boolean onCommand(CommandEvent e)
 	{
 		if(e.getCommand().getName().equalsIgnoreCase("login") && e.getSender() == logingPlayer)
 		{
 			if(e.getArgs().length > 1)
 			{
 				logingPlayer.sendMessage("Heslo nesmi obsahovat mezery.");
-				return;
+				return true;
 			}
-			else if(e.getArgs().length < 1)
+			if(e.getArgs().length < 1)
 			{
 				logingPlayer.sendMessage("Syntaxe je /login [Heslo]");
-				return;
+				return true;
 			}
 			MorgulPlugin.debug("Player login.");
 			if(checkPassword(LoginManager.hashMD5(e.getArgs()[0])))
@@ -119,22 +96,22 @@ public class LoginManager implements CommandListener, Listener
 				logingPlayer.sendMessage("Loged.");
 				PlayerManager.getPlayer(logingPlayer.getName()).setLogged(true);
 				PlayerManager.removeLoginManager(this);
+				CommandManager.removeListener(this);
 				MorgulPlugin.debug("Player Loged.");
+				return true;
 			}
 			else
+			{
 				logingPlayer.sendMessage("Heslo neni spravne.");
+				return true;
+			}
 		}
+		return false;
 	}
-	
-	
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerMove(PlayerMoveEvent event) 
-	{
-		//Player Joined(didn't entered password)
-		if(!PlayerManager.getPlayer(event.getPlayer().getName()).isLogged())
-			event.setCancelled(true);
-		
-	}
-	
+
+	@Override
+	public boolean isPreLogin() { return preLogin; }
+
+	@Override
+	public boolean isCmdCom() { return cmdCom; }
 }

@@ -1,5 +1,5 @@
 name: MorgulPlugin
-main: cz.winop.morgulplugin.MorgulPlugin
+main: cz.opt.morgulplugin.MorgulPlugin
 version: 0.01
 
 commands:
@@ -12,4 +12,9 @@ commands:
       description: Login command.
       usage: /<command> [password]
       permission: MorgulPlugin.login
+      permission-message: You don't have permission for MorgulPlugin.
+   economy:
+      description: Economy command.
+      usage: /<command> [function] [function argument]
+      permission: MorgulPlugin.economy
       permission-message: You don't have permission for MorgulPlugin.

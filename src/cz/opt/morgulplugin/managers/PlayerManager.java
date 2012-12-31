@@ -1,19 +1,16 @@
-package cz.winop.morgulplugin.managers;
+package cz.opt.morgulplugin.managers;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import cz.winop.morgulplugin.MorgulPlugin;
-import cz.winop.morgulplugin.entity.MorgPlayer;
+import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.entity.MorgPlayer;
 
-public class PlayerManager implements Listener
+public class PlayerManager
 {
 	private static Hashtable<String, MorgPlayer> playerMap;
 	private static List<LoginManager> loginList;
@@ -44,8 +41,7 @@ public class PlayerManager implements Listener
 		return playerMap.get(name).isLogged();
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerLogin(PlayerLoginEvent event) 
+	public static void onPlayerLogin(PlayerLoginEvent event) 
 	{
 		//Player Joined(didn't entered password)
 		MorgulPlugin.debug("Player Joined " + event.getPlayer().getName());
@@ -53,8 +49,7 @@ public class PlayerManager implements Listener
 		loginList.add(new LoginManager(event.getPlayer()));
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerDisconnect(PlayerQuitEvent event)
+	public static void onPlayerDisconnect(PlayerQuitEvent event)
 	{
 		//Player Disconnected(clear memory)
 		getPlayer(event.getPlayer().getName()).disconnected();

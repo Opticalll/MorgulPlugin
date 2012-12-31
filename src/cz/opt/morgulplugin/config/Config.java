@@ -1,4 +1,4 @@
-package cz.winop.morgulplugin.config;
+package cz.opt.morgulplugin.config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import cz.winop.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.MorgulPlugin;
 
 public class Config
 {
-	static final String CONFIG_FILE = "config/morgulConfig.conf";
+	static final String CONFIG_FILE = "Morgul/config/morgulConfig.conf";
 
 	static Map<String, Object> configMap = null;
 

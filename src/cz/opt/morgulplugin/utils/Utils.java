@@ -1,4 +1,4 @@
-package cz.winop.morgulplugin.utils;
+package cz.opt.morgulplugin.utils;
 
 import org.bukkit.Location;
 import org.bukkit.World;

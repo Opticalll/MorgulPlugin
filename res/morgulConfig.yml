@@ -1,0 +1,12 @@
+[DataBase]
+host=localhost
+database=morgul
+port=3306
+user=root
+pass=
+[Login]
+timeout=120
+[System]
+debugmode=true
+[Player]
+Starting_Coins=50

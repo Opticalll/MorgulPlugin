@@ -1,4 +1,4 @@
-package cz.winop.morgulplugin.event;
+package cz.opt.morgulplugin.event;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -9,6 +9,7 @@ public class CommandEvent
 	private Command command;
 	private String label;
 	private String[] args;
+	
 	public CommandEvent(CommandSender sender, Command command, String label, String[] args)
 	{
 		this.sender = sender;
@@ -16,6 +17,7 @@ public class CommandEvent
 		this.label = label;
 		this.args = args;
 	}
+
 	/**
 	 * @return the sender
 	 */
@@ -23,6 +25,7 @@ public class CommandEvent
 	{
 		return sender;
 	}
+
 	/**
 	 * @return the command
 	 */
@@ -30,6 +33,7 @@ public class CommandEvent
 	{
 		return command;
 	}
+
 	/**
 	 * @return the label
 	 */
@@ -37,6 +41,7 @@ public class CommandEvent
 	{
 		return label;
 	}
+
 	/**
 	 * @return the args
 	 */

@@ -1,6 +1,6 @@
-package cz.winop.morgulplugin.managers;
+package cz.opt.morgulplugin.managers;
 
-import cz.winop.morgulplugin.database.DataBase;
+import cz.opt.morgulplugin.database.DataBase;
 
 public class PermissionManager
 {
@@ -31,7 +31,7 @@ public class PermissionManager
 	
 	static boolean hasPermission(int id, String permission)
 	{
-		if(DataBase.getRowCount(DataBase.query("SELECT * FROM permissions WHERE id='" + id + "' AND permission='" + permission + "'")) == 0) 
+		if(DataBase.query("SELECT * FROM permissions WHERE id='" + id + "' AND permission='" + permission + "'").keySet().size() == 0) 
 			return false;
 		else 
 			return true;
