@@ -2,6 +2,7 @@ package cz.opt.morgulplugin.managers;
 
 import org.bukkit.entity.Player;
 
+import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.listener.CommandListener;
 
@@ -52,8 +53,16 @@ public class EconomyManager implements CommandListener
 					}
 					else
 					{
-						PlayerManager.getPlayer(e.getArgs()[3]).addM_coins(Integer.parseInt(e.getArgs()[2]));
-						PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[2]));
+						try
+						{
+							PlayerManager.getPlayer(e.getArgs()[3]).addM_coins(Integer.parseInt(e.getArgs()[2]));
+							PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[2]));
+							return true;
+						} catch(NumberFormatException ex) {
+							MorgulPlugin.log(ex.getMessage());
+							e.getSender().sendMessage("Syntaxe je /economy pay [kolik] [komu]");
+							return true;
+						}
 					}
 				}
 			}
