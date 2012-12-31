@@ -62,7 +62,7 @@ public class Config
 		{
 			String tmp = scan.nextLine();
 			if(tmp.startsWith("#"))
-				tmp = "";
+				continue;
 			input += tmp + "\n";
 		}
 		
