@@ -11,6 +11,7 @@ import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
+import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
 import cz.opt.morgulplugin.managers.LoginManager;
@@ -61,6 +62,8 @@ public final class MorgulPlugin extends JavaPlugin
 			MorgulPlugin.log("LoginManager Init.");
 			EconomyManager.init();
 			MorgulPlugin.log("EconomyManager Init.");
+			ChatManager.init();
+			MorgulPlugin.log("ChatManager Init.");
 		}	
 	}
 	

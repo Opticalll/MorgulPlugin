@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/bukkit-1.4.5-R1.0.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.20-bin.jar"/>
 	<classpathentry kind="lib" path="lib/SpoutPlugin.jar"/>
 	<classpathentry kind="lib" path="res"/>
+	<classpathentry kind="lib" path="lib/bukkit-1.4.6-R0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

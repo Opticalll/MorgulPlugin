@@ -4,6 +4,8 @@ database=morgul
 port=3306
 user=root
 pass=
+[Chat]
+Max_QuedMesseges=5
 [Login]
 timeout=120
 [System]

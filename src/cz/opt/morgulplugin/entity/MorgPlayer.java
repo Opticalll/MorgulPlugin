@@ -113,6 +113,11 @@ public class MorgPlayer
 		return lastPlayed;
 	}
 
+	public String getName()
+	{
+		return name;
+	}
+
 	public int getM_coins()
 	{
 		return m_coins;

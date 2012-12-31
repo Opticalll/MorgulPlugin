@@ -39,7 +39,7 @@ public class PlayerManager
 	
 	public static boolean playerExist(String name)
 	{
-		if(DataBase.query("SELECT * FROM players WHERE playername='" + name + "'").keySet().size() > 0)
+		if(playerMap.get(name) != null || DataBase.query("SELECT * FROM players WHERE playername='" + name + "'").keySet().size() > 0)
 			return true;
 		else
 			return false;

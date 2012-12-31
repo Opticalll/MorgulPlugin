@@ -15,6 +15,7 @@ public class EconomyManager implements CommandListener
 	{
 		instance = new EconomyManager();
 		CommandManager.registerListener("economy", instance);
+		CommandManager.registerListener("pay", instance);
 	}
 	
 	public static EconomyManager getInstance()
@@ -46,14 +47,16 @@ public class EconomyManager implements CommandListener
 				}
 				else
 				{
-					if(PlayerManager.getPlayer(e.getArgs()[3]) == null)
+					if(PlayerManager.getPlayer(e.getArgs()[2]) == null)
 					{
-						if(PlayerManager.playerExist(e.getArgs()[3]))
+						if(PlayerManager.playerExist(e.getArgs()[2]))
 						{
 							try
 							{
-								PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[2]));
-								modM_coinstoOffline(e.getArgs()[3], Integer.parseInt(e.getArgs()[2]));
+								PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[1]));
+								PlayerManager.getPlayer(e.getSender().getName()).getPlayer().sendMessage("Zaplatil jste hraci " + e.getArgs()[2] + " " + e.getArgs()[1] + "Morgul Coins.");
+								modM_coinstoOffline(e.getArgs()[2], Integer.parseInt(e.getArgs()[1]));
+								ChatManager.sendMsg(e.getSender(), e.getArgs()[2], "Hrac " + e.getSender().getName() + " vam zaplatil " + e.getArgs()[1] + " Morgul Coins.");
 								return true;
 							} catch(NumberFormatException ex) {
 								MorgulPlugin.log(ex.getMessage());
@@ -71,8 +74,10 @@ public class EconomyManager implements CommandListener
 					{
 						try
 						{
-							PlayerManager.getPlayer(e.getArgs()[3]).addM_coins(Integer.parseInt(e.getArgs()[2]));
-							PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[2]));
+							PlayerManager.getPlayer(e.getArgs()[2]).addM_coins(Integer.parseInt(e.getArgs()[1]));
+							PlayerManager.getPlayer(e.getArgs()[2]).getPlayer().sendMessage("Hrac " + e.getSender().getName() + " vam zaplatil " + e.getArgs()[2] + " " + e.getArgs()[1] + "Morgul Coins.");
+							PlayerManager.getPlayer(e.getSender().getName()).removeM_coins(Integer.parseInt(e.getArgs()[1]));
+							PlayerManager.getPlayer(e.getSender().getName()).getPlayer().sendMessage("Zaplatil jste hraci " + e.getArgs()[2] + " " + e.getArgs()[1] + "Morgul Coins.");
 							return true;
 						} catch(NumberFormatException ex) {
 							MorgulPlugin.log(ex.getMessage());
@@ -82,6 +87,14 @@ public class EconomyManager implements CommandListener
 					}
 				}
 			}
+		}
+		else if(e.getCommand().getName().equalsIgnoreCase("pay") && e.getSender() instanceof Player)
+		{
+			String cmd = "";
+			for (int i = 1; i < e.getArgs().length; i++)
+				cmd += e.getArgs()[i];
+			PlayerManager.getPlayer(e.getSender().getName()).getPlayer().performCommand("/economy pay " + cmd);
+			return true;
 		}
 		return false;
 	}

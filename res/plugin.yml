@@ -17,4 +17,29 @@ commands:
       description: Economy command.
       usage: /<command> [function] [function argument]
       permission: MorgulPlugin.economy
+      permission-message: You don't have permission for MorgulPlugin. 
+   pay:
+      description: Economy command.
+      usage: /<command> [function] [function argument]
+      permission: MorgulPlugin.economy
+      permission-message: You don't have permission for MorgulPlugin.
+   chat:
+      description: Chat command.
+      usage: /<command> [function] [function argument]
+      permission: MorgulPlugin.chat
+      permission-message: You don't have permission for MorgulPlugin.
+   w:
+      description: Chat command.
+      usage: /<command> [player] [message]
+      permission: MorgulPlugin.whisper
+      permission-message: You don't have permission for MorgulPlugin.
+   msg:
+      description: Chat command.
+      usage: /<command> [player] [message]
+      permission: MorgulPlugin.whisper
+      permission-message: You don't have permission for MorgulPlugin.
+   whisper:
+      description: Chat command.
+      usage: /<command> [player] [message]
+      permission: MorgulPlugin.whisper
       permission-message: You don't have permission for MorgulPlugin.
