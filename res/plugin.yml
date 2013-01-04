@@ -20,7 +20,7 @@ commands:
       permission-message: You don't have permission for MorgulPlugin. 
    pay:
       description: Economy command.
-      usage: /<command> [function] [function argument]
+      usage: /<command> [function argument]
       permission: MorgulPlugin.economy
       permission-message: You don't have permission for MorgulPlugin.
    chat:

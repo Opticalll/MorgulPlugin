@@ -11,48 +11,48 @@ import cz.opt.morgulplugin.listener.CommandListener;
 
 public class CommandManager
 {
-	//TODO HashMap<String, CommandListener> change to HashMap<String, List<CommandListener>> and remoe loginListeners
-	private static HashMap<String, CommandListener> listenerMap;
-	private static List<CommandListener> loginListeners;
+	private static HashMap<String, List<CommandListener>> listenerMap;
 	
 	public static void init()
 	{
-		listenerMap = new HashMap<String, CommandListener>();
-		loginListeners = new ArrayList<CommandListener>();
+		listenerMap = new HashMap<String, List<CommandListener>>();
 	}
 	
 	public static synchronized void registerListener(String command, CommandListener listener)
 	{
-		listenerMap.put(command.toLowerCase(), listener);
+		if(listenerMap.get(command) == null)
+		{
+			List<CommandListener> temp = new ArrayList<CommandListener>();
+			temp.add(listener);
+			listenerMap.put(command.toLowerCase(), temp);
+		}
+		else
+			listenerMap.get(command).add(listener);
 	}
 	
-	public static synchronized void removeListener(CommandListener listener)
+	public static synchronized void removeListener(String command, CommandListener listener)
 	{
-		listenerMap.remove(listener);
-	}
-	
-	public static synchronized void registerLoginListener(CommandListener listener)
-	{
-		loginListeners.add(listener);
-	}
-	
-	public static synchronized void removeLoginListener(CommandListener listener)
-	{
-		loginListeners.remove(listener);
+		if(listenerMap.get(command) != null)
+			listenerMap.get(command).remove(listener);
 	}
 	
 	public static synchronized boolean sendCommand(CommandEvent e)
 	{
+		if(listenerMap.get(e.getCommand().getName().toLowerCase()) == null)
+			return false;
 		if(e.getSender() instanceof Player && !PlayerManager.getPlayer(e.getSender().getName()).isLogged())
-			for(CommandListener cl : loginListeners)
-				cl.onCommand(e);
-		if(e.getSender() instanceof Player && !PlayerManager.getPlayer(e.getSender().getName()).isLogged() && listenerMap.get(e.getCommand().getName().toLowerCase()).isPreLogin())
-			return listenerMap.get(e.getCommand().getName().toLowerCase()).onCommand(e);
+			 for(CommandListener prl : listenerMap.get(e.getCommand().getName().toLowerCase()))
+				 if(prl.isPreLogin())
+					 prl.onCommand(e);
 		else if(e.getSender() instanceof Player && PlayerManager.getPlayer(e.getSender().getName()).isLogged())
-			return listenerMap.get(e.getCommand().getName().toLowerCase()).onCommand(e);
-		else if(!(e.getSender() instanceof Player) && listenerMap.get(e.getCommand().getName().toLowerCase()).isCmdCom())
-			return listenerMap.get(e.getCommand().getName().toLowerCase()).onCommand(e);
+			for(CommandListener com : listenerMap.get(e.getCommand().getName().toLowerCase()))
+					 com.onCommand(e);
+		else if(!(e.getSender() instanceof Player))
+			for(CommandListener cmd : listenerMap.get(e.getCommand().getName().toLowerCase()))
+				if(cmd.isCmdCom())
+					cmd.onCommand(e);
 		else
-			return true;
+			return false;
+		return true;
 	}
 }

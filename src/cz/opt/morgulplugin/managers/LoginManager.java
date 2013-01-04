@@ -44,13 +44,13 @@ public class LoginManager implements CommandListener
 	{
 		logingPlayer = pl;
 		
-		CommandManager.registerLoginListener(this);
+		CommandManager.registerListener("login", this);
 		MorgulPlugin.debug("Login Manager Constructed.");
 		if((PlayerManager.getPlayer(pl.getName()).getLastPlayed() + (LOGIN_TIMEOUT_SECONDS * 1000)) > System.currentTimeMillis())
 		{
 			PlayerManager.getPlayer(logingPlayer.getName()).setLogged(true);
 			PlayerManager.removeLoginManager(this);
-			CommandManager.removeLoginListener(this);
+			CommandManager.removeListener("login", this);
 			MorgulPlugin.debug("Has been loged in " + LOGIN_TIMEOUT_SECONDS + " Sec.");
 			MorgulPlugin.thisPlugin.getServer().getScheduler().scheduleSyncDelayedTask(MorgulPlugin.thisPlugin, new AcceptQuedMessages(PlayerManager.getPlayer(logingPlayer.getName())), 100L);
 		}
@@ -98,7 +98,7 @@ public class LoginManager implements CommandListener
 				logingPlayer.sendMessage("Loged.");
 				PlayerManager.getPlayer(logingPlayer.getName()).setLogged(true);
 				PlayerManager.removeLoginManager(this);
-				CommandManager.removeLoginListener(this);
+				CommandManager.removeListener("login", this);
 				MorgulPlugin.debug("Player Loged.");
 				ChatManager.acceptQuedMsgs(PlayerManager.getPlayer(logingPlayer.getName()));
 				MorgulPlugin.debug("Player Accept Qued Msgs.");
