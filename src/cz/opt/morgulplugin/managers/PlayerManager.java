@@ -29,17 +29,17 @@ public class PlayerManager
 
 	public static int getPlayerId(String name)
 	{
-		return Integer.parseInt(DataBase.query("SELECT * FROM players WHERE playername='" + name + "'").get(1).get("id"));
+		return Integer.parseInt(DataBase.query("SELECT * FROM players WHERE playername='" + name.toLowerCase() + "'").get(1).get("id"));
 	}
 
 	public static MorgPlayer getPlayer(String name)
 	{
-		return playerMap.get(name);
+		return playerMap.get(name.toLowerCase());
 	}
 	
 	public static boolean playerExist(String name)
 	{
-		if(playerMap.get(name) != null || DataBase.query("SELECT * FROM players WHERE playername='" + name + "'").keySet().size() > 0)
+		if(playerMap.get(name.toLowerCase()) != null || DataBase.query("SELECT * FROM players WHERE playername='" + name.toLowerCase() + "'").keySet().size() > 0)
 			return true;
 		else
 			return false;
@@ -47,21 +47,21 @@ public class PlayerManager
 
 	public static boolean isLoggedIn(String name)
 	{
-		return playerMap.get(name).isLogged();
+		return playerMap.get(name.toLowerCase()).isLogged();
 	}
 
 	public static void onPlayerLogin(PlayerLoginEvent event) 
 	{
 		//Player Joined(didn't entered password)
-		MorgulPlugin.debug("Player Joined " + event.getPlayer().getName());
-		playerMap.put(event.getPlayer().getName(), new MorgPlayer(event.getPlayer().getName(), event.getPlayer(), false));
+		MorgulPlugin.debug("Player Joined " + event.getPlayer().getName().toLowerCase());
+		playerMap.put(event.getPlayer().getName().toLowerCase(), new MorgPlayer(event.getPlayer().getName().toLowerCase(), event.getPlayer(), false));
 		loginList.add(new LoginManager(event.getPlayer()));
 	}
 
 	public static void onPlayerDisconnect(PlayerQuitEvent event)
 	{
 		//Player Disconnected(clear memory)
-		getPlayer(event.getPlayer().getName()).disconnected();
-		playerMap.remove(event.getPlayer().getName());
+		getPlayer(event.getPlayer().getName().toLowerCase()).disconnected();
+		playerMap.remove(event.getPlayer().getName().toLowerCase());
 	}
 }

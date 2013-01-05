@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
@@ -27,6 +29,11 @@ public class ChatManager implements CommandListener
 		CommandManager.registerListener("msg", instance);
 		CommandManager.registerListener("whisper", instance);
 		CommandManager.registerListener("chat", instance);
+	}
+	
+	public static void onPlayerChatEvent(AsyncPlayerChatEvent e)
+	{
+		MorgulPlugin.log("Chated.");
 	}
 
 	@Override

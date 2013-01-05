@@ -41,16 +41,22 @@ public class CommandManager
 		if(listenerMap.get(e.getCommand().getName().toLowerCase()) == null)
 			return false;
 		if(e.getSender() instanceof Player && !PlayerManager.getPlayer(e.getSender().getName()).isLogged())
-			 for(CommandListener prl : listenerMap.get(e.getCommand().getName().toLowerCase()))
-				 if(prl.isPreLogin())
-					 prl.onCommand(e);
+			 for(int i = 0; i < listenerMap.get(e.getCommand().getName().toLowerCase()).size(); i++)
+			 {
+				 if(listenerMap.get(e.getCommand().getName().toLowerCase()).get(i).isPreLogin())
+					 listenerMap.get(e.getCommand().getName().toLowerCase()).get(i).onCommand(e);
+			 }
 		else if(e.getSender() instanceof Player && PlayerManager.getPlayer(e.getSender().getName()).isLogged())
-			for(CommandListener com : listenerMap.get(e.getCommand().getName().toLowerCase()))
-					 com.onCommand(e);
+			for(int i = 0; i < listenerMap.get(e.getCommand().getName().toLowerCase()).size(); i++)
+			{
+					listenerMap.get(e.getCommand().getName().toLowerCase()).get(i).onCommand(e);
+			}
 		else if(!(e.getSender() instanceof Player))
-			for(CommandListener cmd : listenerMap.get(e.getCommand().getName().toLowerCase()))
-				if(cmd.isCmdCom())
-					cmd.onCommand(e);
+			for(int i = 0; i < listenerMap.get(e.getCommand().getName().toLowerCase()).size(); i++)
+			{
+				if(listenerMap.get(e.getCommand().getName().toLowerCase()).get(i).isCmdCom())
+					listenerMap.get(e.getCommand().getName().toLowerCase()).get(i).onCommand(e);
+			}
 		else
 			return false;
 		return true;

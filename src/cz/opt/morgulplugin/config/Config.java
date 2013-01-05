@@ -26,9 +26,12 @@ public class Config
 			try
 			{
 				String[] folders = CONFIG_FILE.split("/");
-				for(int i = 0; i < folders.length; i++)
+				for(int i = 0; i < folders.length - 1; i++)
 				{
-					File folder = new File(folders[i]);
+					String folderpath = null;
+					for(int g = 0; g < i; g++)
+						folderpath += folders[g] + "/";
+					File folder = new File(folderpath + folders[i]);
 					if(folder.exists())
 						continue;
 					else

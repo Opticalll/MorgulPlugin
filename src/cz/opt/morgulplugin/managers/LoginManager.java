@@ -45,7 +45,7 @@ public class LoginManager implements CommandListener
 		logingPlayer = pl;
 		
 		CommandManager.registerListener("login", this);
-		MorgulPlugin.debug("Login Manager Constructed.");
+		MorgulPlugin.debug("Login Manager Constructed. " + pl.getName());
 		if((PlayerManager.getPlayer(pl.getName()).getLastPlayed() + (LOGIN_TIMEOUT_SECONDS * 1000)) > System.currentTimeMillis())
 		{
 			PlayerManager.getPlayer(logingPlayer.getName()).setLogged(true);

@@ -101,11 +101,11 @@ public class EconomyManager implements CommandListener
 		}
 		else if(e.getCommand().getName().equalsIgnoreCase("pay") && e.getSender() instanceof Player)
 		{
-			MorgulPlugin.log("paycmd activ");
 			String cmd = "";
-			for (int i = 1; i < e.getArgs().length; i++)
-				cmd += e.getArgs()[i];
-			PlayerManager.getPlayer(e.getSender().getName()).getPlayer().performCommand("/economy pay " + cmd);
+			for (int i = 0; i < e.getArgs().length; i++)
+				cmd += " " + e.getArgs()[i];
+			MorgulPlugin.log(cmd);
+			PlayerManager.getPlayer(e.getSender().getName()).getPlayer().performCommand("economy pay" + cmd);
 			return true;
 		}
 		return false;
