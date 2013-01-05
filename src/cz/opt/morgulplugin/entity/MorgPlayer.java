@@ -1,6 +1,7 @@
 package cz.opt.morgulplugin.entity;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
+import cz.opt.morgulplugin.structs.Stat;
 import cz.opt.morgulplugin.utils.Utils;
 
 public class MorgPlayer
@@ -17,6 +19,7 @@ public class MorgPlayer
 	private int id;
 	private String name;
 	private Player pl;
+	private Hashtable<String, Stat> stats;
 	private boolean logged;
 	private Location logLoc;
 	private long lastPlayed;
@@ -32,6 +35,7 @@ public class MorgPlayer
 		this.name = name;
 		this.logged = logged;
 		this.pl = pl;
+		this.stats = new Hashtable<String, Stat>();
 		if(name.contains("'"))
 		{
 			pl.kickPlayer("Player name is UnAllowed.");
@@ -45,6 +49,7 @@ public class MorgPlayer
 	private void loadUserData()
 	{
 		HashMap<Integer, HashMap<String, String>> rs = DataBase.query("SELECT * FROM players WHERE playername='" + name + "'");
+		stats.put("mining", new Stat(0, 1));
 		if(rs.keySet().size() < 1)
 		{
 			newPlayer();
@@ -55,6 +60,7 @@ public class MorgPlayer
 		lastPlayed = Long.parseLong(rs.get(1).get("lastplayed"));
 		rs = DataBase.query("SELECT * FROM player_accounts WHERE id='" + id + "'");
 		m_coins = Integer.parseInt(rs.get(1).get("morgul_coins"));
+		
 	}
 	
 	private void newPlayer()
@@ -108,6 +114,16 @@ public class MorgPlayer
 		return pl;
 	}
 
+	public Stat getStatByName(String name)
+	{
+		return stats.get(name);
+	}
+	
+	public void setStat(String name)
+	{
+		
+	}
+	
 	public long getLastPlayed()
 	{
 		return lastPlayed;
