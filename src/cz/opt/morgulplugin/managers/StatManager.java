@@ -20,7 +20,7 @@ public class StatManager
 	{
 		String senderName = e.getPlayer().getName();
 		MorgPlayer player = PlayerManager.getPlayer(senderName);
-		String destoyedBlock = e.getBlock().getType().toString();
+		String destoyedBlock = e.getBlock().getType().toString().toLowerCase();
 		
 		String confData = Config.get(SECTION, destoyedBlock);
 		MorgulPlugin.debug("Block destroyed: " + destoyedBlock);
@@ -33,7 +33,8 @@ public class StatManager
 				int xp = Integer.parseInt(confData);
 				miningStat.setXP(miningStat.getXP() + xp);
 				
-				player.setStat("mining");
+				player.setStat("mining", miningStat);
+				MorgulPlugin.debug("Added " + xp + " xp to player's mining stat.");
 			}
 		}
 	}

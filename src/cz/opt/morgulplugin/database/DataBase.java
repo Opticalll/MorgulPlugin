@@ -1,5 +1,8 @@
 package cz.opt.morgulplugin.database;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,6 +15,7 @@ import cz.opt.morgulplugin.config.Config;
 
 public class DataBase
 {
+	static final String SQL_FILE = "/sql/tables.sql";
 	static final String SECTION = "DataBase";
 	static Connection con;
 	static String url;
@@ -32,11 +36,36 @@ public class DataBase
 		try
 		{
 			con = DriverManager.getConnection(url, user, pass);
+			setUpTables();
 		} catch (SQLException e) {
 			MorgulPlugin.log("Database SQL Error: " + e.getMessage());
 			return false;
+		} catch (IOException e)
+		{
+			MorgulPlugin.log("SQL File setup Error: " + e.getMessage());
 		}
 		return true;
+	}
+	
+	private static void setUpTables() throws IOException
+	{
+		String sql;
+		StringBuffer sb = new StringBuffer();
+		BufferedReader br = new BufferedReader(new InputStreamReader(DataBase.class.getResourceAsStream(SQL_FILE)));
+		while((sql = br.readLine()) != null)
+			sb.append(sql);
+		br.close();
+		
+		String[] statements = sb.toString().split(";");
+		
+		for(int i = 0; i < statements.length; i++)
+		{
+			
+			if(!statements[i].trim().equals(""))
+			{
+				DataBase.update(statements[i]);
+			}
+		}
 	}
 	
 	public static HashMap<Integer, HashMap<String, String>> query(String sqlQuery)

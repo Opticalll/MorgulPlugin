@@ -10,6 +10,7 @@ import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.event.CommandEvent;
+import cz.opt.morgulplugin.eventmanager.BlockEventManager;
 import cz.opt.morgulplugin.eventmanager.ChatEventManager;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
 import cz.opt.morgulplugin.managers.ChatManager;
@@ -17,6 +18,7 @@ import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
 import cz.opt.morgulplugin.managers.LoginManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
+import cz.opt.morgulplugin.managers.StatManager;
 
 public final class MorgulPlugin extends JavaPlugin
 {
@@ -65,6 +67,8 @@ public final class MorgulPlugin extends JavaPlugin
 			MorgulPlugin.log("EconomyManager Init.");
 			ChatManager.init();
 			MorgulPlugin.log("ChatManager Init.");
+			StatManager.init();
+			MorgulPlugin.log("StatManager Init.");
 		}	
 	}
 	
@@ -73,6 +77,7 @@ public final class MorgulPlugin extends JavaPlugin
 	{
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
+		this.getServer().getPluginManager().registerEvents(new BlockEventManager(), this);
 	}
 	
 	@Override
