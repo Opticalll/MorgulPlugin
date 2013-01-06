@@ -29,6 +29,7 @@ public class ChatManager implements CommandListener
 	public static void init()
 	{
 		instance = new ChatManager();
+		channels = new Hashtable<String, ChatChannel>();
 		worldChannel = new ChatChannel();
 		MAX_QUED_MESSEGES = Integer.parseInt(Config.get(SECTION, "Max_QuedMesseges"));
 		CommandManager.registerListener("w", instance);

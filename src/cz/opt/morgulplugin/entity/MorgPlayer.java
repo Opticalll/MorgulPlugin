@@ -45,6 +45,7 @@ public class MorgPlayer
 		this.logged = logged;
 		this.pl = pl;
 		this.stats = new Hashtable<String, Stat>();
+		chatChannels = new ArrayList<ChatChannel>();
 		joinChannel(ChatManager.getWorldChannel());
 		if(name.contains("'"))
 		{
@@ -197,11 +198,11 @@ public class MorgPlayer
 
 	public void joinChannel(ChatChannel e)
 	{
-		chatChannels.add(e);
+		e.connect(this);
 	}
 	
 	public void removeChannel(ChatChannel e)
 	{
-		chatChannels.remove(e);
+		e.disconnect(this);
 	}
 }

@@ -12,6 +12,8 @@ timeout=120
 debugmode=true
 [Player]
 Starting_Coins=50
+Starting_Xp=0
+Starting_Lvl=1
 [Stats]
 [ChatChannel]
 plCountBasic=2

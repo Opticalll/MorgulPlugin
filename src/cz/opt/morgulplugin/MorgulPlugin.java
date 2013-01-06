@@ -55,6 +55,7 @@ public final class MorgulPlugin extends JavaPlugin
 			}
 			else
 				MorgulPlugin.log("Database SetUp.");
+			
 			PlayerManager.init();
 			MorgulPlugin.log("PlayerManager Init.");
 			MorgPlayer.init();
