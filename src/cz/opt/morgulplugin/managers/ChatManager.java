@@ -1,8 +1,10 @@
 package cz.opt.morgulplugin.managers;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,11 +16,13 @@ import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.listener.CommandListener;
+import cz.opt.morgulplugin.structs.ChatChannel;
 
 public class ChatManager implements CommandListener
 {
 	private static final String SECTION = "Chat";
 	private static int MAX_QUED_MESSEGES;
+	private static Hashtable<String, ChatChannel> channels;
 	public static ChatManager instance;
 	
 	public static void init()
@@ -34,6 +38,12 @@ public class ChatManager implements CommandListener
 	public static void onPlayerChatEvent(AsyncPlayerChatEvent e)
 	{
 		MorgulPlugin.log("Chated.");
+		ArrayList<ChatChannel> tempCha = PlayerManager.getPlayer(e.getPlayer().getName()).getChannels();
+		for(int i = 0; i < tempCha.size(); i++)
+		{
+			String msg = "[" + e.getPlayer().getName() + "]: " + e.getMessage();
+			tempCha.get(i).sendMsg(msg);
+		}
 	}
 
 	@Override
@@ -65,6 +75,10 @@ public class ChatManager implements CommandListener
 				e.getSender().sendMessage("Hrac Jmenem " + e.getArgs()[0] + " neexistuje.");
 				return true;
 			}
+		}
+		else if(e.getCommand().getName().equalsIgnoreCase("chat"))
+		{
+			
 		}
 		return false;
 	}

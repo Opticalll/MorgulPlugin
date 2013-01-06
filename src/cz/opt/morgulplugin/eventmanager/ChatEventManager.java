@@ -13,9 +13,8 @@ public class ChatEventManager implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent e)
 	{ 
-		if(!PlayerManager.getPlayer(e.getPlayer().getName()).isLogged())
-			e.setCancelled(true);
-		else
+		e.setCancelled(true);
+		if(PlayerManager.getPlayer(e.getPlayer().getName()).isLogged())
 			ChatManager.onPlayerChatEvent(e);
 	}
 }
