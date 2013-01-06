@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.entity.MorgPlayer;
+import cz.opt.morgulplugin.managers.ChatManager;
 
 public class ChatChannel
 {
@@ -16,7 +17,7 @@ public class ChatChannel
 	private int maxPlayers;
 	private ChatColor color;
     private String name;
-	ChatChannel(MorgPlayer pl, String channelName)
+	public ChatChannel(MorgPlayer pl, String channelName)
 	{
 		name = channelName;
 		channelManager = pl;
@@ -27,15 +28,17 @@ public class ChatChannel
 		 */
 		maxPlayers = Integer.parseInt(Config.get(SECTION, "plCountBasic"));
 		players = new ArrayList<MorgPlayer>();
+		ChatManager.addChannel(name, this);
 	}
 	
-	ChatChannel()
+	public ChatChannel()
 	{
 		//Constructing general Chat;
 		name = "World";
 		channelManager = null;
 		maxPlayers = MorgulPlugin.thisPlugin.getServer().getMaxPlayers();
 		players = new ArrayList<MorgPlayer>();
+		ChatManager.addChannel(name, this);
 	}
 	
 	public void changeChatColor(MorgPlayer pl, String arg)
@@ -55,8 +58,10 @@ public class ChatChannel
 	
 	public void deleteChannel(MorgPlayer pl)
 	{
+
+		ChatManager.removeChannel(name);
 		for(int i = 0; i < players.size(); i++){}
-			//pl.removeChannel(this)
+			pl.removeChannel(this);
 	}
 	
 	public void sendMsg(String msg)
@@ -68,7 +73,7 @@ public class ChatChannel
 	public void disconnect(MorgPlayer pl)
 	{
 		players.remove(pl);
-		//pl.removeChannel(this);
+		pl.removeChannel(this);
 	}
 	
 	public void connect(MorgPlayer pl)
@@ -76,7 +81,7 @@ public class ChatChannel
 		if(players.size() < maxPlayers)
 		{
 			players.add(pl);
-		//pl.addChannel(this);
+			pl.joinChannel(this);
 		}
 		else
 			pl.getPlayer().sendMessage("Kanal je plny.");

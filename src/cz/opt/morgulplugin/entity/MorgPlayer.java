@@ -1,5 +1,6 @@
 package cz.opt.morgulplugin.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Set;
@@ -10,6 +11,8 @@ import org.bukkit.entity.Player;
 import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
+import cz.opt.morgulplugin.managers.ChatManager;
+import cz.opt.morgulplugin.structs.ChatChannel;
 import cz.opt.morgulplugin.structs.Stat;
 import cz.opt.morgulplugin.utils.Utils;
 
@@ -23,6 +26,7 @@ public class MorgPlayer
 	private String name;
 	private Player pl;
 	private Hashtable<String, Stat> stats;
+	private ArrayList<ChatChannel> chatChannels;
 	private boolean logged;
 	private Location logLoc;
 	private long lastPlayed;
@@ -41,6 +45,7 @@ public class MorgPlayer
 		this.logged = logged;
 		this.pl = pl;
 		this.stats = new Hashtable<String, Stat>();
+		joinChannel(ChatManager.getWorldChannel());
 		if(name.contains("'"))
 		{
 			pl.kickPlayer("Player name is UnAllowed.");
@@ -114,6 +119,7 @@ public class MorgPlayer
 		commitStats();
 	}
 	
+	
 	/**
 	 * @return the logged
 	 */
@@ -182,5 +188,20 @@ public class MorgPlayer
 	{
 		this.m_coins -= count;
 		updateAccount();
+	}
+
+	public ArrayList<ChatChannel> getChatChannels()
+	{
+		return chatChannels;
+	}
+
+	public void joinChannel(ChatChannel e)
+	{
+		chatChannels.add(e);
+	}
+	
+	public void removeChannel(ChatChannel e)
+	{
+		chatChannels.remove(e);
 	}
 }

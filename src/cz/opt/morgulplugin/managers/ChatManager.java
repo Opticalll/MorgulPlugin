@@ -23,11 +23,13 @@ public class ChatManager implements CommandListener
 	private static final String SECTION = "Chat";
 	private static int MAX_QUED_MESSEGES;
 	private static Hashtable<String, ChatChannel> channels;
+	private static ChatChannel worldChannel;
 	public static ChatManager instance;
 	
 	public static void init()
 	{
 		instance = new ChatManager();
+		worldChannel = new ChatChannel();
 		MAX_QUED_MESSEGES = Integer.parseInt(Config.get(SECTION, "Max_QuedMesseges"));
 		CommandManager.registerListener("w", instance);
 		CommandManager.registerListener("msg", instance);
@@ -38,12 +40,22 @@ public class ChatManager implements CommandListener
 	public static void onPlayerChatEvent(AsyncPlayerChatEvent e)
 	{
 		MorgulPlugin.log("Chated.");
-		ArrayList<ChatChannel> tempCha = PlayerManager.getPlayer(e.getPlayer().getName()).getChannels();
+		ArrayList<ChatChannel> tempCha = PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels();
 		for(int i = 0; i < tempCha.size(); i++)
 		{
 			String msg = "[" + e.getPlayer().getName() + "]: " + e.getMessage();
 			tempCha.get(i).sendMsg(msg);
 		}
+	}
+	
+	public static void addChannel(String name, ChatChannel e)
+	{
+		channels.put(name, e);
+	}
+	
+	public static void removeChannel(String name)
+	{
+		channels.remove(name);
 	}
 
 	@Override
@@ -132,4 +144,9 @@ public class ChatManager implements CommandListener
 	public boolean isPreLogin(){ return false; }
 	@Override
 	public boolean isCmdCom(){ return true; }
+
+	public static ChatChannel getWorldChannel()
+	{
+		return worldChannel;
+	}
 }

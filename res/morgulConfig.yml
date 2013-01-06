@@ -13,3 +13,6 @@ debugmode=true
 [Player]
 Starting_Coins=50
 [Stats]
+[ChatChannel]
+plCountBasic=2
+plCountVio=15
