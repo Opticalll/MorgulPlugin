@@ -15,6 +15,7 @@ public class ChatChannel
 	private ArrayList<MorgPlayer> players;
 	private int maxPlayers;
 	private ChatColor color;
+	private String password;
     private String name;
 	public ChatChannel(MorgPlayer pl, String channelName)
 	{
@@ -28,6 +29,8 @@ public class ChatChannel
 		maxPlayers = Integer.parseInt(Config.get(SECTION, "plCountBasic"));
 		players = new ArrayList<MorgPlayer>();
 		color = ChatColor.WHITE;
+		password = "";
+		pl.joinChannel(this);
 		ChatManager.addChannel(name, this);
 	}
 	
@@ -42,26 +45,24 @@ public class ChatChannel
 		ChatManager.addChannel(name, this);
 	}
 	
-	public void changeChatColor(MorgPlayer pl, String arg)
+	public void changeChatColor(MorgPlayer pl, String arg) throws IllegalArgumentException
 	{
 		if(channelManager == pl)
-		{
-			try
-			{
-				color = ChatColor.valueOf(arg);
-			} catch(IllegalArgumentException e) {
-				pl.getPlayer().sendMessage("Tato barva neni podporovana.");
-			}
-		}
+			color = ChatColor.valueOf(arg);
 		else
 			pl.getPlayer().sendMessage("Nejste spravce tohoto kanalu.");
 	}
 	
 	public void deleteChannel(MorgPlayer pl)
 	{
-		ChatManager.removeChannel(name);
-		for(int i = 0; i < players.size(); i++){}
-			pl.removeChannel(this);
+		if(channelManager == pl)
+		{
+			ChatManager.removeChannel(name);
+			for(int i = 0; i < players.size(); i++)
+				pl.removeChannel(this);
+		}
+		else
+			pl.getPlayer().sendMessage("Nejste spravce tohoto kanalu.");
 	}
 	
 	public void sendMsg(String msg)
@@ -90,5 +91,28 @@ public class ChatChannel
 	public String getName()
 	{
 		return name;
+	}
+
+	public String getPassword()
+	{
+		return password;
+	}
+	
+	public boolean isPassword()
+	{
+		if(password.equals(""))
+			return false;
+		else
+			return true;
+	}
+	
+	public void setChannelManager(MorgPlayer pl)
+	{
+		this.channelManager = pl;
+	}
+
+	public void setPassword(String password)
+	{
+		this.password = password;
 	}
 }

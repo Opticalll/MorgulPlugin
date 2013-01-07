@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
@@ -36,11 +35,11 @@ public class ChatManager implements CommandListener
 		CommandManager.registerListener("msg", instance);
 		CommandManager.registerListener("whisper", instance);
 		CommandManager.registerListener("chat", instance);
+		CommandManager.registerListener("channel", instance);
 	}
 	
 	public static void onPlayerChatEvent(AsyncPlayerChatEvent e)
 	{
-		MorgulPlugin.log("Chated." + PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels().size());
 		ArrayList<ChatChannel> tempCha = PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels();
 		for(int i = 0; i < tempCha.size(); i++)
 		{
@@ -89,9 +88,9 @@ public class ChatManager implements CommandListener
 				return true;
 			}
 		}
-		else if(e.getCommand().getName().equalsIgnoreCase("chat"))
+		else if(e.getCommand().getName().equalsIgnoreCase("chat") && e.getSender() instanceof Player)
 		{
-			if(e.getArgs().length > 1 && channels.get(e.getArgs()[0]) != null && PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
+			if(e.getArgs().length > 1 && channels.get(e.getArgs()[0].toLowerCase()) != null && PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
 			{
 				ArrayList<ChatChannel> list = PlayerManager.getPlayer(e.getSender().getName()).getChatChannels();
 				String msg = "[" + e.getSender().getName() + "]: ";
@@ -100,10 +99,180 @@ public class ChatManager implements CommandListener
 				list.get(list.indexOf(channels.get(e.getArgs()[0].toLowerCase()))).sendMsg(msg);
 			}
 		}
-		else if(e.getCommand().getName().equalsIgnoreCase("channel"))
+		else if(e.getCommand().getName().equalsIgnoreCase("channel") && e.getSender() instanceof Player)
 		{
 			if(e.getArgs().length < 1)
+			{
 				e.getSender().sendMessage("Commands Are Channel Create Delete Join Disconnect List.");
+				return true;
+			}
+			else if(e.getArgs()[0].equalsIgnoreCase("join"))
+			{
+				if(e.getArgs().length < 2)
+				{
+					e.getSender().sendMessage("Syntaxe je /channel join [kanal] [password]");
+					return true;
+				}
+				if(channels.get(e.getArgs()[1].toLowerCase()) == null)
+				{
+					e.getSender().sendMessage("Kanal neexistuje");
+					return true;
+				}
+				if(channels.get(e.getArgs()[1].toLowerCase()).isPassword())
+				{
+					if(e.getArgs().length < 3)
+					{
+						e.getSender().sendMessage("Kanal je zaheslovan zadejte heslo.");
+						return true;
+					}
+					if(!channels.get(e.getArgs()[1].toLowerCase()).getPassword().equals(LoginManager.hashMD5(e.getArgs()[2])))
+					{
+						e.getSender().sendMessage("Heslo je nespravne");
+						return true;
+					}
+				}
+				PlayerManager.getPlayer(e.getSender().getName()).joinChannel(channels.get(e.getArgs()[1].toLowerCase()));
+				e.getSender().sendMessage("Pripojen.");
+				return true;
+			}
+			else if(e.getArgs()[0].equalsIgnoreCase("disconnect"))
+			{
+				if(e.getArgs().length < 2)
+				{
+					e.getSender().sendMessage("Syntaxe je /channel disconnect [kanal]");
+					return true;
+				}
+				if(!PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[1].toLowerCase())))
+				{
+					e.getSender().sendMessage("V tomto kanalu nejste.");
+					return true;
+				}
+				PlayerManager.getPlayer(e.getSender().getName()).disconnectChannel(channels.get(e.getArgs()[1].toLowerCase()));
+				e.getSender().sendMessage("Byl jste odpojen.");
+				return true;
+			}
+			else if(e.getArgs()[0].equalsIgnoreCase("list"))
+			{
+				String msg = "Channels: ";
+				ArrayList<ChatChannel> list = PlayerManager.getPlayer(e.getSender().getName()).getChatChannels();
+				for(int i = 0; i < list.size(); i++)
+				{
+					if(i != 0)
+						msg += "             ";
+					msg += list.get(i).getName() + "\n";
+				}
+				e.getSender().sendMessage(msg);
+				return true;
+			}
+			else if(e.getArgs()[0].equalsIgnoreCase("create"))
+			{
+				if(e.getArgs().length < 2)
+				{
+					e.getSender().sendMessage("Syntaxe je /channel create [kanal] [heslo]");
+					return true;
+				}
+				if(channels.get(e.getArgs()[1].toLowerCase()) != null)
+				{
+					e.getSender().sendMessage("Tento kanal uz existuje.");
+					return true;
+				}
+				channels.put(e.getArgs()[1].toLowerCase(), new ChatChannel(PlayerManager.getPlayer(e.getSender().getName()), e.getArgs()[1]));
+				if(e.getArgs().length > 2)
+					channels.get(e.getArgs()[1].toLowerCase()).setPassword(LoginManager.hashMD5(e.getArgs()[2]));
+				e.getSender().sendMessage("Kanal vytvoren");
+				return true;
+			}
+			else if(e.getArgs()[0].equalsIgnoreCase("delete"))
+			{
+				if(e.getArgs().length < 2)
+				{
+					e.getSender().sendMessage("Syntaxe je /channel delete [kanal]");
+					return true;
+				}
+				if(channels.get(e.getArgs()[1].toLowerCase()) == null)
+				{
+					e.getSender().sendMessage("Kanal neexistuje");
+					return true;
+				}
+				channels.get(e.getArgs()[1].toLowerCase()).deleteChannel(PlayerManager.getPlayer(e.getSender().getName()));
+				e.getSender().sendMessage("Kanal vymazan");
+				return true;
+			}
+			else if(e.getArgs()[0].equalsIgnoreCase("modify"))
+			{
+				if(e.getArgs().length < 3)
+				{
+					e.getSender().sendMessage("Syntaxe je /channel modify [kanal] [function] [arguments]");
+					return true;
+				}
+				if(channels.get(e.getArgs()[1].toLowerCase()) == null)
+				{
+					e.getSender().sendMessage("Kanal neexistuje");
+					return true;
+				}
+				if(e.getArgs()[2].equalsIgnoreCase("color"))
+				{
+					if(e.getArgs().length < 4)
+					{
+						e.getSender().sendMessage("Syntaxe je /channel modify [kanal] color [color]");
+						return true;
+					}
+					try
+					{
+						channels.get(e.getArgs()[1].toLowerCase()).changeChatColor(PlayerManager.getPlayer(e.getSender().getName()), e.getArgs()[3].toUpperCase());
+						e.getSender().sendMessage("Zmena barvy se provedla.");
+					} catch(IllegalArgumentException ex) {
+						e.getSender().sendMessage("Barva neni Podporovana.");
+					}
+					return true;
+				}
+				else if(e.getArgs()[2].equalsIgnoreCase("changepass"))
+				{
+					if(e.getArgs().length < 4)
+					{
+						channels.get(e.getArgs()[1].toLowerCase()).setPassword("");
+						e.getSender().sendMessage("Kanal jiz neni zaheslovan");
+						return true;
+					}
+					else
+					{
+						channels.get(e.getArgs()[1].toLowerCase()).setPassword(LoginManager.hashMD5(e.getArgs()[3]));
+						e.getSender().sendMessage("Heslo bylo zmeneno.");
+						return true;
+					}
+				}
+				else if(e.getArgs()[2].equalsIgnoreCase("changemanager"))
+				{
+					if(e.getArgs().length < 4)
+					{
+						e.getSender().sendMessage("Syntaxe je /channel modify [kanal] changemanager [playername]");
+						return true;
+					}
+					if(PlayerManager.playerExist(e.getArgs()[3]))
+					{
+						e.getSender().sendMessage("Hrac neexistuje.");
+						return true;
+					}
+					if(PlayerManager.isLoggedIn(e.getArgs()[3]))
+					{
+						e.getSender().sendMessage("Hrac neni online.");
+						return true;
+					}
+					channels.get(e.getArgs()[1].toLowerCase()).setChannelManager(PlayerManager.getPlayer(e.getArgs()[3]));
+					e.getSender().sendMessage("ChannelManager byl zmenen");
+					return true;
+				}
+				else
+				{
+					e.getSender().sendMessage("Syntaxe je /channel modify [kanal] [function] [arguments]");
+					return true;
+				}
+			}
+			else
+			{
+				e.getSender().sendMessage("Commands Are Channel Create Delete Join Disconnect List Modify.");
+				return true;
+			}
 				
 		}
 		return false;

@@ -206,8 +206,13 @@ public class MorgPlayer
 		chatChannels.add(e);
 	}
 	
-	public void removeChannel(ChatChannel e)
+	public void disconnectChannel(ChatChannel e)
 	{
 		e.disconnect(this);
+	}
+	
+	public void removeChannel(ChatChannel e)
+	{
+		chatChannels.remove(e);
 	}
 }
