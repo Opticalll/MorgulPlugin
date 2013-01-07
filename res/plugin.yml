@@ -25,7 +25,12 @@ commands:
       permission-message: You don't have permission for MorgulPlugin.
    chat:
       description: Chat command.
-      usage: /<command> [function] [function argument]
+      usage: /<command> [channel] [message]
+      permission: MorgulPlugin.chat
+      permission-message: You don't have permission for MorgulPlugin.
+   channel:
+      description: Chat command.
+      usage: /<command> [function] [argument]
       permission: MorgulPlugin.chat
       permission-message: You don't have permission for MorgulPlugin.
    w:
@@ -42,4 +47,4 @@ commands:
       description: Chat command.
       usage: /<command> [player] [message]
       permission: MorgulPlugin.whisper
-      permission-message: You don't have permission for MorgulPlugin.
+      permission-message: You don't have permission for MorgulPlugin

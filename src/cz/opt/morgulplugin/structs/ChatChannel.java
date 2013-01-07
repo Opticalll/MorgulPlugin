@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 
-import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.managers.ChatManager;
@@ -28,6 +27,7 @@ public class ChatChannel
 		 */
 		maxPlayers = Integer.parseInt(Config.get(SECTION, "plCountBasic"));
 		players = new ArrayList<MorgPlayer>();
+		color = ChatColor.WHITE;
 		ChatManager.addChannel(name, this);
 	}
 	
@@ -36,8 +36,9 @@ public class ChatChannel
 		//Constructing general Chat;
 		name = "World";
 		channelManager = null;
-		maxPlayers = MorgulPlugin.thisPlugin.getServer().getMaxPlayers();
+		maxPlayers = Integer.parseInt(Config.get(SECTION, "worldPlCount"));
 		players = new ArrayList<MorgPlayer>();
+		color = ChatColor.WHITE;
 		ChatManager.addChannel(name, this);
 	}
 	
@@ -58,7 +59,6 @@ public class ChatChannel
 	
 	public void deleteChannel(MorgPlayer pl)
 	{
-
 		ChatManager.removeChannel(name);
 		for(int i = 0; i < players.size(); i++){}
 			pl.removeChannel(this);
@@ -81,7 +81,7 @@ public class ChatChannel
 		if(players.size() < maxPlayers)
 		{
 			players.add(pl);
-			pl.joinChannel(this);
+			pl.addChannel(this);
 		}
 		else
 			pl.getPlayer().sendMessage("Kanal je plny.");

@@ -55,19 +55,18 @@ public final class MorgulPlugin extends JavaPlugin
 			}
 			else
 				MorgulPlugin.log("Database SetUp.");
-			
-			PlayerManager.init();
-			MorgulPlugin.log("PlayerManager Init.");
-			MorgPlayer.init();
-			MorgulPlugin.log("MorgulPlayer Init.");
 			CommandManager.init();
 			MorgulPlugin.log("CommandManager Init.");
+			PlayerManager.init();
+			MorgulPlugin.log("PlayerManager Init.");
+			ChatManager.init();
+			MorgulPlugin.log("ChatManager Init.");
+			MorgPlayer.init();
+			MorgulPlugin.log("MorgulPlayer Init.");
 			LoginManager.init();
 			MorgulPlugin.log("LoginManager Init.");
 			EconomyManager.init();
 			MorgulPlugin.log("EconomyManager Init.");
-			ChatManager.init();
-			MorgulPlugin.log("ChatManager Init.");
 			StatManager.init();
 			MorgulPlugin.log("StatManager Init.");
 		}	

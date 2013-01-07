@@ -1,9 +1,9 @@
 [DataBase]
-host=localhost
-database=morgul
+host=109.81.121.193
+database=adam
 port=3306
-user=root
-pass=
+user=adam
+pass=olovrant877
 [Chat]
 Max_QuedMesseges=5
 [Login]
@@ -15,6 +15,9 @@ Starting_Coins=50
 Starting_Xp=0
 Starting_Lvl=1
 [Stats]
+DIRT=10
 [ChatChannel]
 plCountBasic=2
-plCountVio=15
+plCountVip=15
+#Max PLayer Count
+worldPlCount=15

@@ -40,7 +40,7 @@ public class ChatManager implements CommandListener
 	
 	public static void onPlayerChatEvent(AsyncPlayerChatEvent e)
 	{
-		MorgulPlugin.log("Chated.");
+		MorgulPlugin.log("Chated." + PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels().size());
 		ArrayList<ChatChannel> tempCha = PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels();
 		for(int i = 0; i < tempCha.size(); i++)
 		{
@@ -51,12 +51,12 @@ public class ChatManager implements CommandListener
 	
 	public static void addChannel(String name, ChatChannel e)
 	{
-		channels.put(name, e);
+		channels.put(name.toLowerCase(), e);
 	}
 	
 	public static void removeChannel(String name)
 	{
-		channels.remove(name);
+		channels.remove(name.toLowerCase());
 	}
 
 	@Override
@@ -91,7 +91,20 @@ public class ChatManager implements CommandListener
 		}
 		else if(e.getCommand().getName().equalsIgnoreCase("chat"))
 		{
-			
+			if(e.getArgs().length > 1 && channels.get(e.getArgs()[0]) != null && PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
+			{
+				ArrayList<ChatChannel> list = PlayerManager.getPlayer(e.getSender().getName()).getChatChannels();
+				String msg = "[" + e.getSender().getName() + "]: ";
+				for(int i = 1; i < e.getArgs().length; i++)
+					msg += e.getArgs()[i] + " ";
+				list.get(list.indexOf(channels.get(e.getArgs()[0].toLowerCase()))).sendMsg(msg);
+			}
+		}
+		else if(e.getCommand().getName().equalsIgnoreCase("channel"))
+		{
+			if(e.getArgs().length < 1)
+				e.getSender().sendMessage("Commands Are Channel Create Delete Join Disconnect List.");
+				
 		}
 		return false;
 	}
