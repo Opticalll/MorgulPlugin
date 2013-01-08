@@ -41,10 +41,20 @@ public class ChatManager implements CommandListener
 	public static void onPlayerChatEvent(AsyncPlayerChatEvent e)
 	{
 		ArrayList<ChatChannel> tempCha = PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels();
-		for(int i = 0; i < tempCha.size(); i++)
+		if(PlayerManager.getPlayer(e.getPlayer().getName()).getChatStatusChannel() == "")
 		{
-			String msg = "[" + e.getPlayer().getName() + "]: " + e.getMessage();
-			tempCha.get(i).sendMsg(msg);
+			for(int i = 0; i < tempCha.size(); i++)
+			{
+				String msg = "[" + e.getPlayer().getName() + "]: " + e.getMessage();
+				tempCha.get(i).sendMsg(msg);
+			}
+		}
+		else
+		{
+			if(PlayerManager.getPlayer(e.getPlayer().getName()).getChatChannels().contains(channels.get(PlayerManager.getPlayer(e.getPlayer().getName()).getChatStatusChannel().toLowerCase())))
+			{
+				channels.get(PlayerManager.getPlayer(e.getPlayer().getName()).getChatStatusChannel().toLowerCase()).sendMsg("[" + e.getPlayer().getName() + "]: " + e.getMessage());
+			}
 		}
 	}
 	
@@ -92,22 +102,28 @@ public class ChatManager implements CommandListener
 		{
 			if(e.getArgs().length > 1)
 			{
-				if(channels.get(e.getArgs()[0].toLowerCase()) == null)
+				if(e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") && channels.get(e.getArgs()[0].toLowerCase()) == null)
 				{
 					e.getSender().sendMessage("Kanal neexistuje.");
 					return true;
 				}
-				else
+				if(e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") || PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
 				{
-					if(PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
+					if(e.getArgs()[0].toLowerCase().equalsIgnoreCase("all"))
 					{
-						
+						PlayerManager.getPlayer(e.getSender().getName()).setChatStatusChannel("");
+						return true;
 					}
 					else
 					{
-						e.getSender().sendMessage("Nejste pripojen k tomuto kanalu.");
+						PlayerManager.getPlayer(e.getSender().getName()).setChatStatusChannel(e.getArgs()[0].toLowerCase());
 						return true;
 					}
+				}
+				else
+				{
+					e.getSender().sendMessage("Nejste pripojen k tomuto kanalu.");
+					return true;
 				}
 			}
 			else

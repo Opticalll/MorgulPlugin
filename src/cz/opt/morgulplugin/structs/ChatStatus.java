@@ -31,4 +31,10 @@ public class ChatStatus
 			all = true;
 		updateButton();
 	}
+
+	public String getChannel()
+	{
+		return channel;
+	}
+	
 }

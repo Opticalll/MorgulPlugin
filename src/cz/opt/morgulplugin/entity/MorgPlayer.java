@@ -13,9 +13,9 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
-import cz.opt.morgulplugin.enums.ChatStatus;
 import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.structs.ChatChannel;
+import cz.opt.morgulplugin.structs.ChatStatus;
 import cz.opt.morgulplugin.structs.Stat;
 import cz.opt.morgulplugin.utils.Utils;
 
@@ -37,6 +37,16 @@ public class MorgPlayer
 	private long lastPlayed;
 	private int m_coins;
 	
+	public String getChatStatusChannel()
+	{
+		return chatSt.getChannel();
+	}
+	
+	public void setChatStatusChannel(String channel)
+	{
+		chatSt.setChannel(channel);
+	}
+
 	public Hashtable<String, Stat> getStats()
 	{
 		return stats;
