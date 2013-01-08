@@ -55,8 +55,7 @@ public class StatManager implements CommandListener
 		MorgPlayer player = PlayerManager.getPlayer(((Player) e.getSender()).getName());
 		if(cmdName.equalsIgnoreCase(CMD_STATS))
 		{
-			// TODO: display all stats to player who typed /stats
-			player.getPlayer().sendMessage("Stat:");
+			player.getPlayer().sendMessage("Stat: " + cmdName + ", XP: " + player.getStatByName(cmdName).getXP() + ", LVL: " + player.getStatByName(cmdName).getLevel());
 			return true;
 		}
 		
