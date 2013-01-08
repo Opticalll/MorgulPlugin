@@ -80,6 +80,10 @@ public class MorgPlayer
 	public void spoutInit()
 	{
 		GenericButton statusButton = new GenericButton();
+		statusButton.setX(0);
+		statusButton.setY(0);
+		statusButton.setWidth(75);
+		statusButton.setHeight(20);
 		chatSt = new ChatStatus(statusButton);
 		spl.getMainScreen().attachWidget(MorgulPlugin.thisPlugin, statusButton);
 	}

@@ -100,7 +100,7 @@ public class ChatManager implements CommandListener
 		}
 		else if(e.getCommand().getName().equalsIgnoreCase("chat") && e.getSender() instanceof Player)
 		{
-			if(e.getArgs().length > 1)
+			if(e.getArgs().length >= 1)
 			{
 				if(e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") && channels.get(e.getArgs()[0].toLowerCase()) == null)
 				{
@@ -116,7 +116,7 @@ public class ChatManager implements CommandListener
 					}
 					else
 					{
-						PlayerManager.getPlayer(e.getSender().getName()).setChatStatusChannel(e.getArgs()[0].toLowerCase());
+						PlayerManager.getPlayer(e.getSender().getName()).setChatStatusChannel(channels.get(e.getArgs()[0].toLowerCase()).getName());
 						return true;
 					}
 				}

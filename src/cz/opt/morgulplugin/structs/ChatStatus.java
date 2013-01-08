@@ -29,6 +29,8 @@ public class ChatStatus
 		this.channel = channel;
 		if(channel.isEmpty())
 			all = true;
+		else
+			all = false;
 		updateButton();
 	}
 
