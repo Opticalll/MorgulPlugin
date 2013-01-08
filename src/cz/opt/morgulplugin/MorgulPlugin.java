@@ -1,7 +1,9 @@
 package cz.opt.morgulplugin;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +15,7 @@ import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.eventmanager.BlockEventManager;
 import cz.opt.morgulplugin.eventmanager.ChatEventManager;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
+import cz.opt.morgulplugin.eventmanager.SpoutEventManager;
 import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
@@ -51,6 +54,7 @@ public final class MorgulPlugin extends JavaPlugin
 			if(!DataBase.setUp())
 			{
 				MorgulPlugin.log("Database could not be SetUp.");
+				setEnabled(false);
 				return;
 			}
 			else
@@ -75,9 +79,15 @@ public final class MorgulPlugin extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		if (!Bukkit.getPluginManager().isPluginEnabled("Spout")) {
+			Bukkit.getLogger().log(Level.WARNING, "Could not start: SpoutPlugin not found. SpoutPlugin is required.");
+			setEnabled(false);
+			return;
+		}
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new BlockEventManager(), this);
+		this.getServer().getPluginManager().registerEvents(new SpoutEventManager(), this);
 	}
 	
 	@Override

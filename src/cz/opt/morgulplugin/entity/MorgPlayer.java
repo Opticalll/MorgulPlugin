@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
@@ -25,6 +26,7 @@ public class MorgPlayer
 	private int id;
 	private String name;
 	private Player pl;
+	private SpoutPlayer spl;
 	private Hashtable<String, Stat> stats;
 	private ArrayList<ChatChannel> chatChannels;
 	private boolean logged;
@@ -214,5 +216,15 @@ public class MorgPlayer
 	public void removeChannel(ChatChannel e)
 	{
 		chatChannels.remove(e);
+	}
+
+	public SpoutPlayer getSpoutPlayer()
+	{
+		return spl;
+	}
+
+	public void setSpoutPlayer(SpoutPlayer spl)
+	{
+		this.spl = spl;
 	}
 }

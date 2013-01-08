@@ -11,6 +11,7 @@ import cz.opt.morgulplugin.managers.PlayerManager;
 
 public class PlayerEventManager implements Listener
 {
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerMove(PlayerMoveEvent event) 
 	{

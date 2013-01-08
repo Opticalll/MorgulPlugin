@@ -80,7 +80,8 @@ public class LoginManager implements CommandListener
 	@Override
 	public boolean onCommand(CommandEvent e)
 	{
-		if(e.getCommand().getName().equalsIgnoreCase("login") && e.getSender() == logingPlayer)
+		MorgulPlugin.log("Cmd Passed.");
+		if(e.getCommand().getName().equalsIgnoreCase("login") && e.getSender().getName().equalsIgnoreCase(logingPlayer.getName()))
 		{
 			if(e.getArgs().length > 1)
 			{
@@ -110,6 +111,8 @@ public class LoginManager implements CommandListener
 				return true;
 			}
 		}
+		else
+			e.getSender().sendMessage("wtf");
 		return false;
 	}
 
