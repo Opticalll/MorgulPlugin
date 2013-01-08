@@ -3,6 +3,10 @@ main: cz.opt.morgulplugin.MorgulPlugin
 version: 0.01
 
 commands:
+   test:
+      description: This is a info command.
+      usage: /<command>
+      permission: MorgulPlugin.info
    info:
       description: This is a info command.
       usage: /<command>

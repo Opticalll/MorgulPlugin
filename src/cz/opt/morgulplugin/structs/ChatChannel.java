@@ -87,6 +87,11 @@ public class ChatChannel
 		else
 			pl.getPlayer().sendMessage("Kanal je plny.");
 	}
+	
+	public String getNameWithColor()
+	{
+		return color + name;
+	}
 
 	public String getName()
 	{

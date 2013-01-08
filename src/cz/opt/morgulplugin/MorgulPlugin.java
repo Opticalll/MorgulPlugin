@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import cz.opt.morgulplugin.commands.Test;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
 import cz.opt.morgulplugin.entity.MorgPlayer;
@@ -84,6 +85,7 @@ public final class MorgulPlugin extends JavaPlugin
 			setEnabled(false);
 			return;
 		}
+		new Test();
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new BlockEventManager(), this);

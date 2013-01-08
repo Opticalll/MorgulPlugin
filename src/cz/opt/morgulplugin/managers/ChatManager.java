@@ -159,7 +159,7 @@ public class ChatManager implements CommandListener
 				{
 					if(i != 0)
 						msg += "             ";
-					msg += list.get(i).getName() + "\n";
+					msg += list.get(i).getNameWithColor() + "\n";
 				}
 				e.getSender().sendMessage(msg);
 				return true;
