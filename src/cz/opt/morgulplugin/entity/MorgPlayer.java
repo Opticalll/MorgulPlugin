@@ -93,7 +93,7 @@ public class MorgPlayer
 		String statName = rs.get(1).get("stat");
 		int xp = Integer.parseInt(rs.get(1).get("xp"));
 		int lvl = Integer.parseInt(rs.get(1).get("lvl"));
-		Stat stat = new Stat(xp, lvl);
+		Stat stat = new Stat(xp, lvl, statName);
 		stats.put(statName, stat);
 	}
 	
@@ -101,9 +101,11 @@ public class MorgPlayer
 	{
 		DataBase.update("INSERT INTO players (playername, location) VALUES('" + this.name + "', '" + Utils.getLocAsString(getPlayer().getLocation()) + "')");
 		HashMap<Integer, HashMap<String, String>> rs = DataBase.query("SELECT * FROM players WHERE playername='" + name + "'");
-		stats.put("mining", new Stat(0, 1));
+		stats.put("mining", new Stat(0, 1, "mining"));
+		
 		if(rs.keySet().size() < 1)
 			return;
+		
 		id = Integer.parseInt(rs.get(1).get("id"));
 		logLoc = Utils.getLocFromString(rs.get(1).get("location"), pl.getWorld());
 		lastPlayed = Long.parseLong(rs.get(1).get("lastplayed"));

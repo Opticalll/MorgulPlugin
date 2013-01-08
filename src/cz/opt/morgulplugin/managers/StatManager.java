@@ -48,15 +48,20 @@ public class StatManager implements CommandListener
 	@Override
 	public boolean onCommand(CommandEvent e)
 	{
-		String cmdName = e.getLabel();
+		String cmdName = e.getCommand().getName();
 		if(!(e.getSender() instanceof Player))
 			return false;
 		
 		MorgPlayer player = PlayerManager.getPlayer(((Player) e.getSender()).getName());
 		if(cmdName.equalsIgnoreCase(CMD_STATS))
 		{
-			player.getPlayer().sendMessage("Stat: " + cmdName + ", XP: " + player.getStatByName(cmdName).getXP() + ", LVL: " + player.getStatByName(cmdName).getLevel());
-			return true;
+			 Stat[] _values = null;
+			 _values = player.getStats().values().toArray(_values); // TODO: failing here
+			 for(int i = 0; i < _values.length; i++)
+			 {
+				 player.getPlayer().sendMessage("Stat: " + cmdName + ", XP: " + player.getStatByName(cmdName).getXP() + ", LVL: " + player.getStatByName(cmdName).getLevel());
+			 }
+			 return true;
 		}
 		
 		return false;

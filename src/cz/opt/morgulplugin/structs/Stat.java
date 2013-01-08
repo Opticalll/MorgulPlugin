@@ -4,11 +4,18 @@ public class Stat
 {
 	private int xp;
 	private int level;
+	private String statName;
 	
-	public Stat(int defXP, int defLevel)
+	public Stat(int defXP, int defLevel, String statName)
 	{
 		this.xp = defXP;
 		this.level = defLevel;
+		this.statName = statName;
+	}
+	
+	public String getName()
+	{
+		return statName;
 	}
 	
 	public int getXP()
