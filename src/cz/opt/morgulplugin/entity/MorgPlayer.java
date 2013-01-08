@@ -7,11 +7,13 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.getspout.spoutapi.gui.GenericButton;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
+import cz.opt.morgulplugin.enums.ChatStatus;
 import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.structs.ChatChannel;
 import cz.opt.morgulplugin.structs.Stat;
@@ -29,11 +31,17 @@ public class MorgPlayer
 	private SpoutPlayer spl;
 	private Hashtable<String, Stat> stats;
 	private ArrayList<ChatChannel> chatChannels;
+	private ChatStatus chatSt;
 	private boolean logged;
 	private Location logLoc;
 	private long lastPlayed;
 	private int m_coins;
 	
+	public Hashtable<String, Stat> getStats()
+	{
+		return stats;
+	}
+
 	public static void init()
 	{
 		START_COINS = Integer.parseInt(Config.get(SECTION, "Starting_Coins"));
@@ -57,6 +65,13 @@ public class MorgPlayer
 		}
 		loadUserData();
 		pl.teleport(logLoc);
+	}
+	
+	public void spoutInit()
+	{
+		GenericButton statusButton = new GenericButton();
+		chatSt = new ChatStatus(statusButton);
+		spl.getMainScreen().attachWidget(MorgulPlugin.thisPlugin, statusButton);
 	}
 	
 	private void loadUserData()

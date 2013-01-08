@@ -19,6 +19,7 @@ public class SpoutEventManager implements Listener
 			return;
 		}
 		PlayerManager.getPlayer(event.getPlayer().getName()).setSpoutPlayer(event.getPlayer());
+		PlayerManager.getPlayer(event.getPlayer().getName()).spoutInit();
 	}
 	
 }
