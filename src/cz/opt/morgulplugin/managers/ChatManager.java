@@ -90,13 +90,30 @@ public class ChatManager implements CommandListener
 		}
 		else if(e.getCommand().getName().equalsIgnoreCase("chat") && e.getSender() instanceof Player)
 		{
-			if(e.getArgs().length > 1 && channels.get(e.getArgs()[0].toLowerCase()) != null && PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
+			if(e.getArgs().length > 1)
 			{
-				ArrayList<ChatChannel> list = PlayerManager.getPlayer(e.getSender().getName()).getChatChannels();
-				String msg = "[" + e.getSender().getName() + "]: ";
-				for(int i = 1; i < e.getArgs().length; i++)
-					msg += e.getArgs()[i] + " ";
-				list.get(list.indexOf(channels.get(e.getArgs()[0].toLowerCase()))).sendMsg(msg);
+				if(channels.get(e.getArgs()[0].toLowerCase()) == null)
+				{
+					e.getSender().sendMessage("Kanal neexistuje.");
+					return true;
+				}
+				else
+				{
+					if(PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))
+					{
+						
+					}
+					else
+					{
+						e.getSender().sendMessage("Nejste pripojen k tomuto kanalu.");
+						return true;
+					}
+				}
+			}
+			else
+			{
+				e.getSender().sendMessage("Syntaxe je /chat [channel]");
+				return true;
 			}
 		}
 		else if(e.getCommand().getName().equalsIgnoreCase("channel") && e.getSender() instanceof Player)

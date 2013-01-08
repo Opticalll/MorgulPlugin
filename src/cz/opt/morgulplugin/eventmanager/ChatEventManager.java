@@ -14,7 +14,7 @@ public class ChatEventManager implements Listener
 	public void onPlayerChat(AsyncPlayerChatEvent e)
 	{ 
 		e.setCancelled(true);
-		if(PlayerManager.getPlayer(e.getPlayer().getName()).isLogged())
+		if(PlayerManager.getPlayer(e.getPlayer().getName()).isLogged() && PlayerManager.getPlayer(e.getPlayer().getName()).getSpoutPlayer() != null)
 			ChatManager.onPlayerChatEvent(e);
 	}
 }
