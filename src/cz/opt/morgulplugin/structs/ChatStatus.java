@@ -16,19 +16,17 @@ public class ChatStatus
 		this.button = button;
 		channel = "";
 		all = true;
+		button.setDirty(true);
 		updateButton();
 	}
 	
 	private void updateButton()
 	{
-		Screen sc = button.getScreen();
-		sc.removeWidget(button);
 		if(!all)
-
 			button.setText(channel);
 		else
 			button.setText("All");
-		sc.attachWidget(MorgulPlugin.thisPlugin, button);
+		button.onTick();
 	}
 	
 	public void setChannel(String channel)
