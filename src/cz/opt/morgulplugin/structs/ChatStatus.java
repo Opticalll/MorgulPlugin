@@ -8,12 +8,14 @@ public class ChatStatus
 	private String channel;
 	private boolean all;
 	
-	public ChatStatus(GenericButton button)
+	public ChatStatus()
 	{
-		this.button = button;
+		GenericButton statusButton = new GenericButton();
+		statusButton.setWidth(75);
+		statusButton.setHeight(20);
+		this.button = statusButton;
 		channel = "";
 		all = true;
-		updateButton();
 	}
 	
 	private void updateButton()
@@ -39,6 +41,11 @@ public class ChatStatus
 	public String getChannel()
 	{
 		return channel;
+	}
+	
+	public GenericButton getButton()
+	{
+		return button;
 	}
 	
 }

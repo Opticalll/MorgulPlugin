@@ -15,7 +15,7 @@ Starting_Coins=50
 Starting_Xp=0
 Starting_Lvl=1
 [Stats]
-DIRT=10
+dirt=10
 [ChatChannel]
 plCountBasic=2
 plCountVip=15

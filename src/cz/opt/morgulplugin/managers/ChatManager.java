@@ -102,7 +102,7 @@ public class ChatManager implements CommandListener
 		{
 			if(e.getArgs().length >= 1)
 			{
-				if(e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") && channels.get(e.getArgs()[0].toLowerCase()) == null)
+				if(!e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") && channels.get(e.getArgs()[0].toLowerCase()) == null)
 				{
 					e.getSender().sendMessage("Kanal neexistuje.");
 					return true;

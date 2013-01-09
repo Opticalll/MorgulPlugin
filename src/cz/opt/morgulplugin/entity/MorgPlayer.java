@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.getspout.spoutapi.gui.GenericButton;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 import cz.opt.morgulplugin.MorgulPlugin;
@@ -79,13 +78,8 @@ public class MorgPlayer
 	
 	public void spoutInit()
 	{
-		GenericButton statusButton = new GenericButton();
-		statusButton.setX(0);
-		statusButton.setY(0);
-		statusButton.setWidth(75);
-		statusButton.setHeight(20);
-		chatSt = new ChatStatus(statusButton);
-		spl.getMainScreen().attachWidget(MorgulPlugin.thisPlugin, statusButton);
+		chatSt = new ChatStatus();
+		spl.getMainScreen().attachWidget(MorgulPlugin.thisPlugin, chatSt.getButton());
 	}
 	
 	private void loadUserData()
