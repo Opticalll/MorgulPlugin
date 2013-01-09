@@ -1,6 +1,9 @@
 package cz.opt.morgulplugin.structs;
 
 import org.getspout.spoutapi.gui.GenericButton;
+import org.getspout.spoutapi.gui.Screen;
+
+import cz.opt.morgulplugin.MorgulPlugin;
 
 public class ChatStatus
 {
@@ -18,10 +21,14 @@ public class ChatStatus
 	
 	private void updateButton()
 	{
+		Screen sc = button.getScreen();
+		sc.removeWidget(button);
 		if(!all)
+
 			button.setText(channel);
 		else
 			button.setText("All");
+		sc.attachWidget(MorgulPlugin.thisPlugin, button);
 	}
 	
 	public void setChannel(String channel)
