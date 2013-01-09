@@ -1,5 +1,7 @@
 package cz.opt.morgulplugin.managers;
 
+import java.util.Iterator;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
@@ -55,13 +57,13 @@ public class StatManager implements CommandListener
 		MorgPlayer player = PlayerManager.getPlayer(((Player) e.getSender()).getName());
 		if(cmdName.equalsIgnoreCase(CMD_STATS))
 		{
-			 Stat[] _values = null;
-			 _values = player.getStats().values().toArray(_values); // TODO: failing here
-			 for(int i = 0; i < _values.length; i++)
-			 {
-				 player.getPlayer().sendMessage("Stat: " + cmdName + ", XP: " + player.getStatByName(cmdName).getXP() + ", LVL: " + player.getStatByName(cmdName).getLevel());
-			 }
-			 return true;
+			Iterator<Stat> i = player.getStats().values().iterator();
+			while(i.hasNext())
+			{
+				Stat nextStat = i.next();
+			}
+			
+			return true;
 		}
 		
 		return false;
