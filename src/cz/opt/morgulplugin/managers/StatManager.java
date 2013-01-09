@@ -61,6 +61,7 @@ public class StatManager implements CommandListener
 			while(i.hasNext())
 			{
 				Stat nextStat = i.next();
+				player.getPlayer().sendMessage("STAT: " + nextStat.getName() + " XP: " + nextStat.getXP() + ", LVL: " + nextStat.getLevel());
 			}
 			
 			return true;
