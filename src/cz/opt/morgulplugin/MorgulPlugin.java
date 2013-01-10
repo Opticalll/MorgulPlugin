@@ -1,5 +1,6 @@
 package cz.opt.morgulplugin;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.getspout.spoutapi.SpoutManager;
 
 import cz.opt.morgulplugin.commands.Test;
 import cz.opt.morgulplugin.config.Config;
@@ -17,6 +19,7 @@ import cz.opt.morgulplugin.eventmanager.BlockEventManager;
 import cz.opt.morgulplugin.eventmanager.ChatEventManager;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
 import cz.opt.morgulplugin.eventmanager.SpoutEventManager;
+import cz.opt.morgulplugin.item.MorgulCoin;
 import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
@@ -86,6 +89,8 @@ public final class MorgulPlugin extends JavaPlugin
 			return;
 		}
 		new Test();
+		SpoutManager.getFileManager().addToCache(this, new File("Morgul\\textures\\m_coin.png"));
+		new MorgulCoin();
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new BlockEventManager(), this);
