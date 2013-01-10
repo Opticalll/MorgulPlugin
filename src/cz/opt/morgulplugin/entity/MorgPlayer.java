@@ -80,6 +80,7 @@ public class MorgPlayer
 	{
 		chatSt = new ChatStatus();
 		spl.getMainScreen().attachWidget(MorgulPlugin.thisPlugin, chatSt.getButton());
+		spl.getMainScreen().attachWidget(MorgulPlugin.thisPlugin, chatSt.getLabel());
 	}
 	
 	private void loadUserData()

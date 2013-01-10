@@ -1,9 +1,9 @@
 [DataBase]
-host=109.81.121.193
-database=adam
-port=3306
-user=adam
-pass=olovrant877
+host=
+database=
+port=
+user=
+pass=
 [Chat]
 Max_QuedMesseges=5
 [Login]
@@ -21,3 +21,10 @@ plCountBasic=2
 plCountVip=15
 #Max PLayer Count
 worldPlCount=15
+[GUI]
+ChatStatus_X=0
+ChatStatus_Y=214
+#Background adjust its width 
+ChatStatus_Width=75
+#Background adjust its height
+ChatStatus_Height=10
