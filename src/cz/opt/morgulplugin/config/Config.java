@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,124 +15,153 @@ import cz.opt.morgulplugin.MorgulPlugin;
 
 public class Config
 {
-	static final String CONFIG_FILE = "Morgul/config/morgulConfig.conf";
+	static final String CONFIG_FOLDER = "Morgul/config/";
 
-	static HashMap<String, HashMap<String, String>> configMap = null;
+	static ArrayList<String> fileList;
+	static HashMap<String, HashMap<String, HashMap<String, String>>> configMap = null;
+	
+	public static boolean init()
+	{
+		fileList = new ArrayList<String>();
+		fileList.add("system.conf");
+		fileList.add("chat.conf");
+		fileList.add("stats.conf");
+		fileList.add("player.conf");
+		fileList.add("gui.conf");
+		configMap = new HashMap<String, HashMap<String, HashMap<String, String>>>();
+		createConfigs();
+		if(!loadConfig())
+			return false;
+		return true;
+	}
+	
+	private static void createConfigs()
+	{
+		for(int z = 0; z < fileList.size(); z++)
+		{
+			String filePath = CONFIG_FOLDER + fileList.get(z);
+			File conf = new File(filePath);
+			if(!conf.exists())
+			{
+				try
+				{
+					String[] folders = filePath.split("/");
+					for(int i = 0; i < folders.length - 1; i++)
+					{
+						String folderpath = "";
+						for(int g = 0; g < i; g++)
+							folderpath += folders[g] + "/";
+						File folder = new File(folderpath + folders[i]);
+						if(folder.exists())
+							continue;
+						else
+							if(!folder.mkdir())
+								MorgulPlugin.log("Folder " + folders[i] + " could not be Created");
+					}
+					if(conf.createNewFile())
+					{
+						MorgulPlugin.log("Config " + fileList.get(z) + " Created.");
+						FileWriter fstream = new FileWriter(conf);
+						BufferedWriter bufOut = new BufferedWriter(fstream);
+
+						Scanner confScan = new Scanner(Config.class.getResourceAsStream("/configs/" + fileList.get(z)));
+						while(confScan.hasNextLine())
+							bufOut.write(confScan.nextLine() + "\n");
+
+						confScan.close();
+						bufOut.close();
+					}
+					else
+						MorgulPlugin.log("Config File could not be created.");
+				} catch (IOException e) {
+					MorgulPlugin.log(e.getMessage());
+					return;
+				}
+			}
+		}
+	}
 
 	public static boolean loadConfig()
 	{
-		File conf = new File(CONFIG_FILE);
-		if(!conf.exists())
+		File dir = new File(CONFIG_FOLDER);
+		File[] files = dir.listFiles(new FilenameFilter() { public boolean accept(File dir, String filename) { return filename.endsWith(".conf"); } } );
+
+		for(int g = 0; g < files.length; g++)
 		{
+			Scanner scan;
 			try
 			{
-				String[] folders = CONFIG_FILE.split("/");
-				for(int i = 0; i < folders.length - 1; i++)
-				{
-					String folderpath = null;
-					for(int g = 0; g < i; g++)
-						folderpath += folders[g] + "/";
-					File folder = new File(folderpath + folders[i]);
-					if(folder.exists())
-						continue;
-					else
-						if(!folder.mkdir())
-							MorgulPlugin.log("Folder " + folders[i] + " could not be Created");
-				}
-				if(conf.createNewFile())
-				{
-					MorgulPlugin.log("Config File Created setup pls MorgulPlugin");
-					FileWriter fstream = new FileWriter(conf);
-					BufferedWriter bufOut = new BufferedWriter(fstream);
-					
-					Scanner confScan = new Scanner(Config.class.getResourceAsStream("/morgulConfig.yml"));
-					while(confScan.hasNextLine())
-						bufOut.write(confScan.nextLine());
-					
-					confScan.close();
-					bufOut.close();
-				}
-				else
-					MorgulPlugin.log("Config File could not be created.");
-				return false;
-			} catch (IOException e) {
+				scan = new Scanner(files[g]);
+			} catch (FileNotFoundException e)
+			{
 				MorgulPlugin.log(e.getMessage());
 				return false;
 			}
-		}	
 
-		Scanner scan;
-		try
-		{
-			scan = new Scanner(conf);
-		} catch (FileNotFoundException e)
-		{
-			MorgulPlugin.log(e.getMessage());
-			return false;
-		}
-
-		String input = "";
-		while(scan.hasNextLine())
-		{
-			String tmp = scan.nextLine();
-			if(tmp.startsWith("#"))
-				continue;
-			input += tmp + "\n";
-		}
-		
-		scan.close();
-		
-		if(input == "")
-		{
-			MorgulPlugin.log("Config file Error");
-			return false;
-		}
-		input += "[";
-		input = input.substring(input.indexOf("[") + 1);
-		List<String> inputChunks = new ArrayList<String>();
-		while(input.contains("["))
-		{
-			inputChunks.add(input.substring(0, input.indexOf("[")));
-			input = input.substring(input.indexOf("[") + 1);
-		}
-
-		List<String> strings = inputChunks;
-		HashMap<String, HashMap<String, String>> mapList = new HashMap<String, HashMap<String, String>>();
-		for(int i = 0; i < strings.size(); i++)
-		{
-			String[] lines = strings.get(i).split("\n");
-			String mapName = null;
-			HashMap<String, String> variableMap = new HashMap<String, String>();
-			for(int z = 0; z < lines.length; z++)
+			String input = "";
+			while(scan.hasNextLine())
 			{
-				if(lines[z] != "")
-				{
-					if(z == 0)
-					{
-						if(lines[z].contains("]"))
-							lines[z] = lines[z].substring(0, lines[z].lastIndexOf("]"));
-						mapName = lines[z]; 
-					}
-					else
-					{
-						String[] record = lines[z].split("=");
-						if(record.length >= 2)
-							variableMap.put(record[0], record[1]);
-						else
-							variableMap.put(record[0], "");
-					}
-				}
-				
+				String tmp = scan.nextLine();
+				if(tmp.startsWith("#"))
+					continue;
+				input += tmp + "\n";
 			}
-			mapList.put(mapName, variableMap);
+
+			scan.close();
+
+			if(input == "")
+			{
+				MorgulPlugin.log("Config file Error");
+				return false;
+			}
+			input += "[";
+			input = input.substring(input.indexOf("[") + 1);
+			List<String> inputChunks = new ArrayList<String>();
+			while(input.contains("["))
+			{
+				inputChunks.add(input.substring(0, input.indexOf("[")));
+				input = input.substring(input.indexOf("[") + 1);
+			}
+
+			List<String> strings = inputChunks;
+			HashMap<String, HashMap<String, String>> mapList = new HashMap<String, HashMap<String, String>>();
+			for(int i = 0; i < strings.size(); i++)
+			{
+				String[] lines = strings.get(i).split("\n");
+				String mapName = null;
+				HashMap<String, String> variableMap = new HashMap<String, String>();
+				for(int z = 0; z < lines.length; z++)
+				{
+					if(lines[z] != "")
+					{
+						if(z == 0)
+						{
+							if(lines[z].contains("]"))
+								lines[z] = lines[z].substring(0, lines[z].lastIndexOf("]"));
+							mapName = lines[z]; 
+						}
+						else
+						{
+							String[] record = lines[z].split("=");
+							if(record.length >= 2)
+								variableMap.put(record[0], record[1]);
+							else
+								variableMap.put(record[0], "");
+						}
+					}
+
+				}
+				mapList.put(mapName, variableMap);
+			}
+			configMap.put(files[g].getName(), mapList);
 		}
-		configMap = mapList;
 		return true;
 	}
 
-	public static String get(String section, String key)
+	public static String get(String file, String section, String key)
 	{
-		HashMap<String, String> tile = configMap.get(section);
-		return (String) tile.get(key);
+		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
+		HashMap<String, String> tileMap = fileMap.get(section); 
+		return (String) tileMap.get(key);
 	}
 }

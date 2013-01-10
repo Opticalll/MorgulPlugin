@@ -1,6 +1,5 @@
 package cz.opt.morgulplugin;
 
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spoutapi.SpoutManager;
 
 import cz.opt.morgulplugin.commands.Test;
 import cz.opt.morgulplugin.config.Config;
@@ -19,16 +17,17 @@ import cz.opt.morgulplugin.eventmanager.BlockEventManager;
 import cz.opt.morgulplugin.eventmanager.ChatEventManager;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
 import cz.opt.morgulplugin.eventmanager.SpoutEventManager;
-import cz.opt.morgulplugin.item.MorgulCoin;
 import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
 import cz.opt.morgulplugin.managers.LoginManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
 import cz.opt.morgulplugin.managers.StatManager;
+import cz.opt.morgulplugin.structs.CustomItem;
 
 public final class MorgulPlugin extends JavaPlugin
 {
+	private static final String CONF_FILE = "system.conf";
 	private static final String SECTION = "System";
 	public static MorgulPlugin thisPlugin;
 	private static boolean debugMode;
@@ -49,12 +48,12 @@ public final class MorgulPlugin extends JavaPlugin
 	{
 		thisPlugin = this;
 		log = this.getLogger();
-		if(!Config.loadConfig())
+		if(!Config.init())
 			MorgulPlugin.log("Config could not be Loaded.");
 		else
 		{
 			MorgulPlugin.log("Config Loaded.");	
-			debugMode = Boolean.parseBoolean(Config.get(SECTION, "debugmode"));
+			debugMode = Boolean.parseBoolean(Config.get(CONF_FILE, SECTION, "debugmode"));
 			if(!DataBase.setUp())
 			{
 				MorgulPlugin.log("Database could not be SetUp.");
@@ -89,8 +88,9 @@ public final class MorgulPlugin extends JavaPlugin
 			return;
 		}
 		new Test();
-		SpoutManager.getFileManager().addToCache(this, new File("Morgul\\textures\\m_coin.png"));
-		new MorgulCoin();
+		
+		CustomItem.init();
+		
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new BlockEventManager(), this);

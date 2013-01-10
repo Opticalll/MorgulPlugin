@@ -10,6 +10,7 @@ import cz.opt.morgulplugin.managers.ChatManager;
 
 public class ChatChannel
 {
+	private static final String CONF_FILE = "chat.conf"; 
 	private static final String SECTION = "ChatChannel"; 
 	private MorgPlayer channelManager;
 	private ArrayList<MorgPlayer> players;
@@ -26,7 +27,7 @@ public class ChatChannel
 		 * else
 		 *  maxPlayers = Integer.parseInt(Config.get(SECTION, plCountBasic));
 		 */
-		maxPlayers = Integer.parseInt(Config.get(SECTION, "plCountBasic"));
+		maxPlayers = Integer.parseInt(Config.get(CONF_FILE, SECTION, "plCountBasic"));
 		players = new ArrayList<MorgPlayer>();
 		color = ChatColor.WHITE;
 		password = "";
@@ -39,7 +40,7 @@ public class ChatChannel
 		//Constructing general Chat;
 		name = "World";
 		channelManager = null;
-		maxPlayers = Integer.parseInt(Config.get(SECTION, "worldPlCount"));
+		maxPlayers = Integer.parseInt(Config.get(CONF_FILE, SECTION, "worldPlCount"));
 		players = new ArrayList<MorgPlayer>();
 		color = ChatColor.WHITE;
 		ChatManager.addChannel(name, this);

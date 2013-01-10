@@ -16,6 +16,7 @@ import cz.opt.morgulplugin.runnable.AcceptQuedMessages;
 
 public class LoginManager implements CommandListener
 {	
+	private static final String CONF_FILE = "system.conf";
 	private static final String SECTION = "Login";
 	private static int LOGIN_TIMEOUT_SECONDS;
 	private Player logingPlayer;
@@ -25,7 +26,7 @@ public class LoginManager implements CommandListener
 	
 	public static void init()
 	{
-		LOGIN_TIMEOUT_SECONDS = Integer.parseInt(Config.get(SECTION, "timeout"));
+		LOGIN_TIMEOUT_SECONDS = Integer.parseInt(Config.get(CONF_FILE, SECTION, "timeout"));
 	}
 	
 	public static String hashMD5(String pass)

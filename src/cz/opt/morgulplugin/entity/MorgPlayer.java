@@ -20,6 +20,7 @@ import cz.opt.morgulplugin.utils.Utils;
 
 public class MorgPlayer
 {
+	private static final String CONF_FILE = "player.conf";
 	private static final String SECTION = "Player";
 	private static int START_COINS;
 	private static int START_XP;
@@ -53,9 +54,9 @@ public class MorgPlayer
 
 	public static void init()
 	{
-		START_COINS = Integer.parseInt(Config.get(SECTION, "Starting_Coins"));
-		START_XP = Integer.parseInt(Config.get(SECTION, "Starting_Xp"));
-		START_LVL = Integer.parseInt(Config.get(SECTION, "Starting_Lvl"));
+		START_COINS = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Starting_Coins"));
+		START_XP = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Starting_Xp"));
+		START_LVL = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Starting_Lvl"));
 	}
 	
 	public MorgPlayer(String name, Player pl, boolean logged)

@@ -14,6 +14,7 @@ import cz.opt.morgulplugin.structs.Stat;
 
 public class StatManager implements CommandListener
 {
+	private static final String CONF_FILE = "stats.conf";
 	private static final String SECTION = "Stats";
 	public static final String CMD_STATS = "stats";
 	private static StatManager instance;
@@ -30,7 +31,7 @@ public class StatManager implements CommandListener
 		MorgPlayer player = PlayerManager.getPlayer(senderName);
 		String destoyedBlock = e.getBlock().getType().toString().toLowerCase();
 		
-		String confData = Config.get(SECTION, destoyedBlock);
+		String confData = Config.get(CONF_FILE, SECTION, destoyedBlock);
 		MorgulPlugin.debug("Block destroyed: " + destoyedBlock);
 		
 		if(player != null)

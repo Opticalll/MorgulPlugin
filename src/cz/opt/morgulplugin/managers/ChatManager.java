@@ -19,6 +19,7 @@ import cz.opt.morgulplugin.structs.ChatChannel;
 
 public class ChatManager implements CommandListener
 {
+	private static final String CONF_FILE = "chat.conf";
 	private static final String SECTION = "Chat";
 	private static int MAX_QUED_MESSEGES;
 	private static Hashtable<String, ChatChannel> channels;
@@ -30,7 +31,7 @@ public class ChatManager implements CommandListener
 		instance = new ChatManager();
 		channels = new Hashtable<String, ChatChannel>();
 		worldChannel = new ChatChannel();
-		MAX_QUED_MESSEGES = Integer.parseInt(Config.get(SECTION, "Max_QuedMesseges"));
+		MAX_QUED_MESSEGES = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Max_QuedMesseges"));
 		CommandManager.registerListener("w", instance);
 		CommandManager.registerListener("msg", instance);
 		CommandManager.registerListener("whisper", instance);

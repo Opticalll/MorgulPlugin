@@ -7,11 +7,12 @@ import cz.opt.morgulplugin.config.Config;
 
 public class ChatStatus
 {
-	private static final String SECTION = "GUI";
-	private final int WIDTH = Integer.parseInt(Config.get(SECTION, "ChatStatus_Width"));;
-	private final int HEIGHT = Integer.parseInt(Config.get(SECTION, "ChatStatus_Height"));;
-	private final int X = Integer.parseInt(Config.get(SECTION, "ChatStatus_X"));
-	private final int Y = Integer.parseInt(Config.get(SECTION, "ChatStatus_Y"));
+	private static final String CONF_FILE = "gui.conf";
+	private static final String SECTION = "ChatStatus";
+	private final int WIDTH = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_Width"));;
+	private final int HEIGHT = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_Height"));;
+	private final int X = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_X"));
+	private final int Y = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_Y"));
 	private GenericButton button;
 	private GenericLabel label;
 	private String channel;

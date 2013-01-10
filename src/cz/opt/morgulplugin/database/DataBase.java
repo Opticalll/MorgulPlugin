@@ -16,6 +16,7 @@ import cz.opt.morgulplugin.config.Config;
 public class DataBase
 {
 	static final String SQL_FILE = "/sql/tables.sql";
+	static final String CONF_FILE = "system.conf";
 	static final String SECTION = "DataBase";
 	static Connection con;
 	static String url;
@@ -27,11 +28,11 @@ public class DataBase
 	
 	public static boolean setUp()
 	{
-		DataBase.host = Config.get(SECTION, "host");
-		DataBase.port = Config.get(SECTION, "port");
-		DataBase.database = Config.get(SECTION, "database");
-		DataBase.pass = Config.get(SECTION, "pass");
-		DataBase.user = Config.get(SECTION, "user");
+		DataBase.host = Config.get(CONF_FILE, SECTION, "host");
+		DataBase.port = Config.get(CONF_FILE, SECTION, "port");
+		DataBase.database = Config.get(CONF_FILE, SECTION, "database");
+		DataBase.pass = Config.get(CONF_FILE, SECTION, "pass");
+		DataBase.user = Config.get(CONF_FILE, SECTION, "user");
 		url = "jdbc:mysql://" + host + ":" + port +"/"+ database;
 		try
 		{
