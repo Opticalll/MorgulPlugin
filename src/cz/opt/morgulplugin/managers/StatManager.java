@@ -1,6 +1,6 @@
 package cz.opt.morgulplugin.managers;
 
-import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -11,12 +11,13 @@ import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.listener.CommandListener;
 import cz.opt.morgulplugin.structs.Stat;
+import cz.opt.morgulplugin.utils.Utils;
 
 public class StatManager implements CommandListener
 {
 	private static final String CONF_FILE = "stats.conf";
-	private static final String SECTION = "Stats";
 	public static final String CMD_STATS = "stats";
+	private static final String[] SECTIONS = {"Mining", "Harvesting", "Digging"};
 	private static StatManager instance;
 	
 	public static void init()
@@ -30,20 +31,32 @@ public class StatManager implements CommandListener
 		String senderName = e.getPlayer().getName();
 		MorgPlayer player = PlayerManager.getPlayer(senderName);
 		String destoyedBlock = e.getBlock().getType().toString().toLowerCase();
+		String confData = null;
+		String activeSection = null;
 		
-		String confData = Config.get(CONF_FILE, SECTION, destoyedBlock);
 		MorgulPlugin.debug("Block destroyed: " + destoyedBlock);
+		
+		for(int i = 0; i < SECTIONS.length; i++)
+		{
+			confData = Config.get(CONF_FILE, SECTIONS[i], destoyedBlock);
+			if(confData != null)
+			{
+				activeSection = SECTIONS[i].toLowerCase();
+				break;
+			}
+		}
+		
 		
 		if(player != null)
 		{
 			if(confData != null)
 			{
-				Stat miningStat = player.getStatByName("mining");
+				Stat miningStat = player.getStatByName(activeSection);
 				int xp = Integer.parseInt(confData);
 				miningStat.setXP(miningStat.getXP() + xp);
 				
-				player.setStat("mining", miningStat);
-				MorgulPlugin.debug("Added " + xp + " xp to player's mining stat.");
+				player.setStat(activeSection, miningStat);
+				MorgulPlugin.debug("Added " + xp + " xp to" + player.getName() + "'s " + activeSection + " stat.");
 			}
 		}
 	}
@@ -58,13 +71,9 @@ public class StatManager implements CommandListener
 		MorgPlayer player = PlayerManager.getPlayer(((Player) e.getSender()).getName());
 		if(cmdName.equalsIgnoreCase(CMD_STATS))
 		{
-			Iterator<Stat> i = player.getStats().values().iterator();
-			while(i.hasNext())
-			{
-				Stat nextStat = i.next();
-				player.getPlayer().sendMessage("STAT: " + nextStat.getName() + " XP: " + nextStat.getXP() + ", LVL: " + nextStat.getLevel());
-			}
-			
+			List<Stat> stats = Utils.mapToList(player.getStats());
+			for(Stat s : stats)
+				player.getPlayer().sendMessage("Stat: " + s.getName() + " | XP: " + s.getXP() + ", LVL: " + s.getLevel());
 			return true;
 		}
 		

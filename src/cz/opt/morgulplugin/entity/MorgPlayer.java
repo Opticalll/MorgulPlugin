@@ -3,7 +3,7 @@ package cz.opt.morgulplugin.entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Set;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -98,13 +98,23 @@ public class MorgPlayer
 		rs = DataBase.query("SELECT * FROM player_accounts WHERE id='" + id + "'");
 		m_coins = Integer.parseInt(rs.get(1).get("morgul_coins"));
 		
-		// load stats
+		loadStats(rs);
+	}
+	
+	private void loadStats(HashMap<Integer, HashMap<String, String>> rs)
+	{
 		rs = DataBase.query("SELECT * FROM player_stats WHERE id='" + id + "'");
-		String statName = rs.get(1).get("stat");
-		int xp = Integer.parseInt(rs.get(1).get("xp"));
-		int lvl = Integer.parseInt(rs.get(1).get("lvl"));
-		Stat stat = new Stat(xp, lvl, statName);
-		stats.put(statName, stat);
+		List<HashMap<String, String>> all = Utils.mapToList(rs);
+		
+		for(int i = 0; i < all.size(); i++)
+		{
+			String statName = all.get(i).get("stat");
+			int xp = Integer.parseInt(all.get(i).get("xp"));
+			int lvl = Integer.parseInt(all.get(i).get("lvl"));
+			Stat stat = new Stat(xp, lvl, statName);
+			stats.put(statName, stat);
+			MorgulPlugin.debug("put " + statName);
+		}
 	}
 	
 	private void newPlayer()
@@ -112,6 +122,8 @@ public class MorgPlayer
 		DataBase.update("INSERT INTO players (playername, location) VALUES('" + this.name + "', '" + Utils.getLocAsString(getPlayer().getLocation()) + "')");
 		HashMap<Integer, HashMap<String, String>> rs = DataBase.query("SELECT * FROM players WHERE playername='" + name + "'");
 		stats.put("mining", new Stat(0, 1, "mining"));
+		stats.put("harvesting", new Stat(0, 1, "harvesting"));
+		stats.put("digging", new Stat(0, 1, "digging"));
 		
 		if(rs.keySet().size() < 1)
 			return;
@@ -121,21 +133,21 @@ public class MorgPlayer
 		lastPlayed = Long.parseLong(rs.get(1).get("lastplayed"));
 		DataBase.update("INSERT INTO player_accounts (id, morgul_coins) VALUES('" + id + "', '" + START_COINS + "')");
 		DataBase.update("INSERT INTO player_stats VALUES('" + id + "', 'mining', '" + START_XP + "', '" + START_LVL + "')");
+		DataBase.update("INSERT INTO player_stats VALUES('" + id + "', 'harvesting', '" + START_XP + "', '" + START_LVL + "')");
+		DataBase.update("INSERT INTO player_stats VALUES('" + id + "', 'digging', '" + START_XP + "', '" + START_LVL + "')");
 		setM_coins(START_COINS);
 		MorgulPlugin.debug("New Player Created.");
 	}
 	
 	private void commitStats()
 	{
-		Set<String> keys = stats.keySet();
+		List<Stat> st = Utils.mapToList(stats);
 		
-		for(int i = 0; i < keys.size(); i++)
+		for(Stat s : st)
 		{
-			String key = keys.iterator().next();
-			Stat stat = stats.get(key);
-			DataBase.update("UPDATE player_stats SET stat='" + key + "', xp='" + stat.getXP() + "', lvl='" + stat.getLevel() + "' WHERE id='" + id + "'");
+			MorgulPlugin.debug("commiting " + s.getName());
+			DataBase.update("UPDATE player_stats SET stat='" + s.getName() + "', xp='" + s.getXP() + "', lvl='" + s.getLevel() + "' WHERE id='" + id + "' AND stat='" + s.getName() + "'");
 		}
-
 	}
 	
 	public void updateAccount()
