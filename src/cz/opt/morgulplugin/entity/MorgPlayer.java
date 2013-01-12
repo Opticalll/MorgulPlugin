@@ -26,16 +26,17 @@ public class MorgPlayer
 	private static int START_XP;
 	private static int START_LVL;
 	private int id;
+	private int m_coins;
+	private long lastPlayed;
+	private long minedBlocks;
+	private boolean logged;
 	private String name;
 	private Player pl;
 	private SpoutPlayer spl;
 	private Hashtable<String, Stat> stats;
 	private ArrayList<ChatChannel> chatChannels;
 	private ChatStatus chatSt;
-	private boolean logged;
 	private Location logLoc;
-	private long lastPlayed;
-	private int m_coins;
 	
 	public String getChatStatusChannel()
 	{
@@ -131,12 +132,21 @@ public class MorgPlayer
 		id = Integer.parseInt(rs.get(1).get("id"));
 		logLoc = Utils.getLocFromString(rs.get(1).get("location"), pl.getWorld());
 		lastPlayed = Long.parseLong(rs.get(1).get("lastplayed"));
+		minedBlocks = 0L;
+		
+		initDatabase();
+		
+		setM_coins(START_COINS);
+		MorgulPlugin.debug("New Player Created.");
+	}
+	
+	private void initDatabase()
+	{
 		DataBase.update("INSERT INTO player_accounts (id, morgul_coins) VALUES('" + id + "', '" + START_COINS + "')");
 		DataBase.update("INSERT INTO player_stats VALUES('" + id + "', 'mining', '" + START_XP + "', '" + START_LVL + "')");
 		DataBase.update("INSERT INTO player_stats VALUES('" + id + "', 'harvesting', '" + START_XP + "', '" + START_LVL + "')");
 		DataBase.update("INSERT INTO player_stats VALUES('" + id + "', 'digging', '" + START_XP + "', '" + START_LVL + "')");
-		setM_coins(START_COINS);
-		MorgulPlugin.debug("New Player Created.");
+		DataBase.update("INSERT INTO overall_stats VALUES('" + id + "', '0')");
 	}
 	
 	private void commitStats()
@@ -148,6 +158,9 @@ public class MorgPlayer
 			MorgulPlugin.debug("commiting " + s.getName());
 			DataBase.update("UPDATE player_stats SET stat='" + s.getName() + "', xp='" + s.getXP() + "', lvl='" + s.getLevel() + "' WHERE id='" + id + "' AND stat='" + s.getName() + "'");
 		}
+		
+		MorgulPlugin.debug("commiting minedBlocks");
+		DataBase.update("UPDATE overall_stats SET mined_blocks='" + minedBlocks + "' WHERE id='" + id + "'");
 	}
 	
 	public void updateAccount()
@@ -182,6 +195,21 @@ public class MorgPlayer
 	public int getId()
 	{
 		return id;
+	}
+	
+	public void addMinedBlocks(int count)
+	{
+		this.minedBlocks += count;
+	}
+	
+	public long getMinedBlocks()
+	{
+		return minedBlocks;
+	}
+	
+	public void setMinedBlocks(long minedBlocks)
+	{
+		this.minedBlocks = minedBlocks;
 	}
 	
 	public Player getPlayer()

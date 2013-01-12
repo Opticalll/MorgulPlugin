@@ -31,6 +31,7 @@ public class AltConfig
 	private AltConfig(String path)
 	{
 		CONFIG_FILE = CONFIG_FOLDER + path;
+		loadConfig();
 	}
 	
 	public boolean loadConfig()

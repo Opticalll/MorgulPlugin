@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.config.AltConfig;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.event.CommandEvent;
@@ -24,6 +25,7 @@ public class StatManager implements CommandListener
 	{
 		instance = new StatManager();
 		CommandManager.registerListener(CMD_STATS, instance);
+		MorgulPlugin.debug("Printed out using AltConfig: dirt=" + AltConfig.stats.get("Digging", "dirt"));
 	}
 	
 	public static void onBlockDestroy(BlockBreakEvent e)
@@ -35,6 +37,7 @@ public class StatManager implements CommandListener
 		String activeSection = null;
 		
 		MorgulPlugin.debug("Block destroyed: " + destoyedBlock);
+		player.addMinedBlocks(1);
 		
 		for(int i = 0; i < SECTIONS.length; i++)
 		{
@@ -74,6 +77,7 @@ public class StatManager implements CommandListener
 			List<Stat> stats = Utils.mapToList(player.getStats());
 			for(Stat s : stats)
 				player.getPlayer().sendMessage("Stat: " + s.getName() + " | XP: " + s.getXP() + ", LVL: " + s.getLevel());
+			player.getPlayer().sendMessage("Destroyed blocks: " + player.getMinedBlocks());
 			return true;
 		}
 		
