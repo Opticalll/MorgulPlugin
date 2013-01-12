@@ -7,10 +7,6 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.material.item.GenericCustomItem;
 
 import cz.opt.morgulplugin.MorgulPlugin;
-import cz.opt.morgulplugin.item.CopperCoin;
-import cz.opt.morgulplugin.item.GoldCoin;
-import cz.opt.morgulplugin.item.MorgulCoin;
-import cz.opt.morgulplugin.item.SilverCoin;
 
 
 public class CustomItem extends GenericCustomItem
@@ -22,10 +18,9 @@ public class CustomItem extends GenericCustomItem
 	public static void init()
 	{
 		itemList = new ArrayList<CustomItem>();
-		new GoldCoin();
-		new MorgulCoin();
-		new SilverCoin();
-		new CopperCoin();
+	}
+	public static void setUpCache()
+	{
 		for(int i = 0; i < itemList.size(); i++)
 		{
 			MorgulPlugin.debug("" + itemList.get(i).getTexturePath());
@@ -33,13 +28,12 @@ public class CustomItem extends GenericCustomItem
 		}
 	}
 	
-	protected String name;
 	protected String texFileName;
 
 	public CustomItem(String name, String texFileName)
 	{
 		super(MorgulPlugin.thisPlugin, name, TEXTUREDIRECTORYPATH + texFileName);
-		this.name = name;
+		MorgulPlugin.debug(name + "--" +TEXTUREDIRECTORYPATH + texFileName);
 		this.texFileName = texFileName;
 		itemList.add(this);
 	}

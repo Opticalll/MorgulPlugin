@@ -27,6 +27,7 @@ public class Config
 		fileList.add("chat.conf");
 		fileList.add("stats.conf");
 		fileList.add("player.conf");
+		fileList.add("coins.conf");
 		fileList.add("gui.conf");
 		configMap = new HashMap<String, HashMap<String, HashMap<String, String>>>();
 		createConfigs();
@@ -163,5 +164,10 @@ public class Config
 		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
 		HashMap<String, String> tileMap = fileMap.get(section); 
 		return (String) tileMap.get(key);
+	}
+	
+	public static HashMap<String, HashMap<String, String>> getFileMap(String file)
+	{
+		return configMap.get(file);
 	}
 }

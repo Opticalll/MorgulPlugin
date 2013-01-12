@@ -18,6 +18,7 @@ import cz.opt.morgulplugin.eventmanager.ChatEventManager;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
 import cz.opt.morgulplugin.eventmanager.SpoutEventManager;
 import cz.opt.morgulplugin.managers.ChatManager;
+import cz.opt.morgulplugin.managers.CoinManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
 import cz.opt.morgulplugin.managers.LoginManager;
@@ -87,9 +88,13 @@ public final class MorgulPlugin extends JavaPlugin
 			setEnabled(false);
 			return;
 		}
+		//Item block init must be here.
+		CustomItem.init();
+		CoinManager.init();
+		MorgulPlugin.log("CoinManager Init.");
+		CustomItem.setUpCache();
 		new Test();
 		
-		CustomItem.init();
 		
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
