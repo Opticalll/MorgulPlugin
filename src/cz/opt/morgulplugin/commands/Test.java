@@ -16,7 +16,7 @@ public class Test implements CommandListener
 	@Override
 	public boolean onCommand(CommandEvent e)
 	{
-		PlayerManager.getPlayer(e.getSender().getName()).getSpoutPlayer().getMainScreen().attachPopupScreen(new CoinExchange());
+		new CoinExchange(PlayerManager.getPlayer(e.getSender().getName()).getSpoutPlayer());
 		return false;
 		
 	}

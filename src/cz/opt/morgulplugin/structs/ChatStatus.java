@@ -27,7 +27,9 @@ public class ChatStatus
 		statusButton.setHeight(HEIGHT);
 		statusButton.setText("");
 		this.button = statusButton;
-		this.label = new GenericLabel("All");;
+		this.label = new GenericLabel("All");
+		this.label.setWidth(WIDTH);
+		this.label.setHeight(HEIGHT);
 		channel = "";
 		all = true;
 		update();

@@ -5,11 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.inventory.SpoutItemStack;
-import org.getspout.spoutapi.inventory.SpoutShapelessRecipe;
-
-import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.item.Coin;
 

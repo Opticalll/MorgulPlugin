@@ -1,5 +1,6 @@
 package cz.opt.morgulplugin;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -7,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.getspout.spout.Spout;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.plugin.SpoutPlugin;
 
 import cz.opt.morgulplugin.commands.Test;
 import cz.opt.morgulplugin.config.Config;
@@ -93,6 +97,7 @@ public final class MorgulPlugin extends JavaPlugin
 		CoinManager.init();
 		MorgulPlugin.log("CoinManager Init.");
 		CustomItem.setUpCache();
+		SpoutManager.getFileManager().addToCache(MorgulPlugin.thisPlugin, new File("Morgul/textures/coinExchange.png"));
 		new Test();
 		
 		
