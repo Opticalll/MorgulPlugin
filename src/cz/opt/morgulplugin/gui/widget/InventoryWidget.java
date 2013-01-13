@@ -122,7 +122,7 @@ public class InventoryWidget extends InventoryView
 		} 
 		else 
 		{
-			//TODO wtd ?
+			//TODO call update content of different inventory.
 		}
 	}
 	

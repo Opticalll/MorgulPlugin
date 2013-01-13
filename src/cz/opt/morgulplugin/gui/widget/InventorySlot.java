@@ -8,6 +8,7 @@ public class InventorySlot extends GenericSlot
 {
 	private boolean readonly = false;
 	private InventoryWidget gui;
+	
 
 	public InventorySlot(int xpos, int ypos, InventoryWidget gui) {
 		this.gui = gui;
@@ -41,6 +42,8 @@ public class InventorySlot extends GenericSlot
 
 	@Override
 	public boolean onItemExchange(ItemStack i, ItemStack j) {
+		if(readonly)
+			return false;
 		return true;
 	}
 

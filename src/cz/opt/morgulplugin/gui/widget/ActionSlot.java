@@ -7,14 +7,29 @@ import cz.opt.morgulplugin.listener.ActionSlotListener;
 
 public class ActionSlot extends GenericSlot
 {
-	ActionSlotListener listener;
+	private ActionSlotListener listener;
+	private boolean readOnly;
 	
-	public ActionSlot(ActionSlotListener listener)
+	public ActionSlot(int x, int y, ActionSlotListener listener)
 	{
 		super();
+		setMargin(y, 0, 0, x);
+		setX(x);
+		setY(y);
+		setFixed(true).setWidth(16).setHeight(16);
 		this.listener = listener;
 	}
 
+	public void setReadOnly(boolean st)
+	{
+		readOnly = st;
+	}
+	
+	public boolean isReadOnly()
+	{
+		return readOnly;
+	}
+	
 	@Override
 	public boolean onItemExchange(ItemStack current, ItemStack cursor)
 	{
