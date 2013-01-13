@@ -19,30 +19,6 @@ public class CoinManager
 	
 	public static ArrayList<Coin> coinList;
 	
-	public static void sortCoinList()
-	{
-		ArrayList<Coin> tempList = new ArrayList<Coin>(); 
-		int min_Value = 0;
-		int index = 0;
-		for(int i = 0; i < coinList.size(); i++)
-		{
-			min_Value = coinList.get(i).getValue();
-			index = i;
-			for(int z = 0; z < coinList.size(); z++)
-			{
-				if(min_Value > coinList.get(z).getValue())
-				{
-					min_Value = coinList.get(z).getValue();
-					index = z;
-				}
-			}
-			tempList.add(coinList.get(index));
-			coinList.remove(index);
-			index = 0;
-		}
-		coinList = tempList;
-	}
-	
 	public static void init()
 	{
 		coinList = new ArrayList<Coin>();
@@ -65,25 +41,5 @@ public class CoinManager
 			   }
 		}
 		);
-		setRecipes();
-	}
-	
-	private static void setRecipes()
-	{
-		for(int i = 0; i < coinList.size(); i++)
-		{
-			if(i != coinList.size() - 1)
-			{
-				Coin lowerValue = coinList.get(i);
-				MorgulPlugin.debug(lowerValue.getName());
-				Coin higherValue = coinList.get(i + 1);
-				MorgulPlugin.debug(higherValue.getName());
-				SpoutItemStack higherValueCoin = new SpoutItemStack(higherValue, 1);
-				SpoutItemStack lowerValueCoin = new SpoutItemStack(lowerValue, 10);
-			    SpoutShapelessRecipe higherValueCoinRecipe = new SpoutShapelessRecipe(higherValueCoin);
-			    higherValueCoinRecipe.addIngredient(lowerValueCoin.getMaterial());
-			    SpoutManager.getMaterialManager().registerSpoutRecipe(higherValueCoinRecipe);
-			}
-		}
 	}
 }

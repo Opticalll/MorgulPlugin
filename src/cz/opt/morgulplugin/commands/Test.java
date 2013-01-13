@@ -1,9 +1,7 @@
 package cz.opt.morgulplugin.commands;
 
-import org.getspout.spoutapi.gui.GenericButton;
-
-import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.event.CommandEvent;
+import cz.opt.morgulplugin.gui.popout.CoinExchange;
 import cz.opt.morgulplugin.listener.CommandListener;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
@@ -18,14 +16,9 @@ public class Test implements CommandListener
 	@Override
 	public boolean onCommand(CommandEvent e)
 	{
-		GenericButton but = new GenericButton();
-		but.setText("Test");
-		but.setX(100);
-		but.setY(100);
-		but.setWidth(50);
-		but.setHeight(20);
-		PlayerManager.getPlayer(e.getSender().getName()).getSpoutPlayer().getMainScreen().attachWidget(MorgulPlugin.thisPlugin, but);
+		PlayerManager.getPlayer(e.getSender().getName()).getSpoutPlayer().getMainScreen().attachPopupScreen(new CoinExchange());
 		return false;
+		
 	}
 
 	@Override
