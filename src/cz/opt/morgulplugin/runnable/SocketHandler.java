@@ -14,7 +14,7 @@ public class SocketHandler implements Runnable
 	private InputStreamReader input = null;
 	private BufferedReader inRead = null;
 	private boolean running = true;
-	
+
 	public SocketHandler(Socket socket)
 	{
 		try {
@@ -26,29 +26,30 @@ public class SocketHandler implements Runnable
 			running = false;
 		}
 	}
-	
+
 	@Override
 	public void run()
 	{
-		while(running)
+		if(!running)
+			return;
+		try
 		{
-			if(socket.isClosed())
+			String msg = "";
+			String line;
+			while((line = inRead.readLine()) != null)
 			{
-				running = false;
-				break;
+				msg += line + "\n";
+				
+				if(line.endsWith("{OP}"))
+				{
+					MorgulPlugin.debug("Event Send");
+					SocketManager.fireSocketInputEvent(msg);
+					msg = "";
+				}
+				MorgulPlugin.debug("Readed");
 			}
-			try
-			{
-				String msg = "";
-				String line;
-				while((line = inRead.readLine()) != null)
-					msg += line + "\n";
-				SocketManager.fireSocketInputEvent(msg);
-			} catch (IOException e)
-			{
-				MorgulPlugin.log("" + e);
-				running = false;
-			}
+		} catch (IOException e) {
+			MorgulPlugin.log("" + e);
 		}
 		try 
 		{
@@ -58,5 +59,7 @@ public class SocketHandler implements Runnable
 		} catch (IOException e) {
 			MorgulPlugin.log("" + e.toString());
 		}
+
+		MorgulPlugin.debug("SocketHandler " + socket.getRemoteSocketAddress() + " Shutting down.");
 	}
 }

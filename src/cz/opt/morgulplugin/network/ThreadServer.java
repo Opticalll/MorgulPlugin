@@ -37,7 +37,7 @@ public class ThreadServer implements Runnable
 			try
 			{
 				clientSocket = socket.accept();
-				MorgulPlugin.log("Socket Accepted. " + socket.getLocalSocketAddress());
+				MorgulPlugin.log("Socket Accepted. " + clientSocket.getRemoteSocketAddress());
 			} catch (IOException e) {
 				if(!isRunning()) {
                     MorgulPlugin.log("Server Stopped.") ;
