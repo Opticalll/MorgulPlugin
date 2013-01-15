@@ -8,9 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spout.Spout;
 import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.plugin.SpoutPlugin;
 
 import cz.opt.morgulplugin.commands.Test;
 import cz.opt.morgulplugin.config.Config;
@@ -27,6 +25,7 @@ import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
 import cz.opt.morgulplugin.managers.LoginManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
+import cz.opt.morgulplugin.managers.SocketManager;
 import cz.opt.morgulplugin.managers.StatManager;
 import cz.opt.morgulplugin.structs.CustomItem;
 
@@ -81,6 +80,8 @@ public final class MorgulPlugin extends JavaPlugin
 			MorgulPlugin.log("EconomyManager Init.");
 			StatManager.init();
 			MorgulPlugin.log("StatManager Init.");
+			SocketManager.init();
+			MorgulPlugin.log("SocketManager Init.");
 		}	
 	}
 	
