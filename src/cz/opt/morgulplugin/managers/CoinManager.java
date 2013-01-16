@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import org.bukkit.Material;
+import org.getspout.spoutapi.inventory.SpoutItemStack;
+
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.item.Coin;
 
@@ -13,6 +16,16 @@ public class CoinManager
 	private static final String CONFIGFILE = "coins.conf";
 	
 	public static ArrayList<Coin> coinList;
+	
+	public static Coin getCoinByMaterial(String mat)
+	{
+		for(int i = 0; i < coinList.size(); i++)
+		{
+			if(coinList.get(i).getName().equalsIgnoreCase(mat))
+				return coinList.get(i);
+		}
+		return null;
+	}
 	
 	public static void init()
 	{

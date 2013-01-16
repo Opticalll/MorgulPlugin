@@ -11,13 +11,16 @@ public class ActionButton extends GenericButton
 {
 	private ArrayList<ActionButtonListener> listeners;
 	
-	public ActionButton()
+	public ActionButton(int x, int y)
 	{
 		super();
+		this.setMargin(y, 0, 0, x);
+		this.setX(x);
+		this.setY(y);
 		listeners = new ArrayList<ActionButtonListener>();
 	}
 	
-	public void registerListener(ActionButtonListener listener)
+	public void addListener(ActionButtonListener listener)
 	{
 		listeners.add(listener);
 	}

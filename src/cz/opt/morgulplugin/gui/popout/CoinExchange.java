@@ -5,22 +5,26 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.getspout.spoutapi.event.screen.ButtonClickEvent;
 import org.getspout.spoutapi.event.screen.ScreenCloseEvent;
-import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.gui.GenericTexture;
 import org.getspout.spoutapi.gui.Widget;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
+import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
+import cz.opt.morgulplugin.gui.widget.ActionButton;
 import cz.opt.morgulplugin.gui.widget.ActionSlot;
 import cz.opt.morgulplugin.gui.widget.InventoryWidget;
+import cz.opt.morgulplugin.gui.widget.Label;
 import cz.opt.morgulplugin.gui.widget.extend.InventoryViewExtention;
 import cz.opt.morgulplugin.item.Coin;
+import cz.opt.morgulplugin.listener.ActionButtonListener;
 import cz.opt.morgulplugin.listener.ActionSlotListener;
 import cz.opt.morgulplugin.managers.CoinManager;
 
-public class CoinExchange implements InventoryViewExtention, ActionSlotListener
+public class CoinExchange implements InventoryViewExtention, ActionSlotListener, ActionButtonListener
 {
 	private static final String CONF_FILE = "gui.conf";
 	private static final String SECTION = "CoinExchanger";
@@ -33,8 +37,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener
 		invWidget = new InventoryWidget(pl, Integer.parseInt(Config.get(CONF_FILE, SECTION, "CoinExchanger_Width")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "CoinExchanger_Height")), this);
 		widgets = new ArrayList<Widget>();
 		slots = new ArrayList<ActionSlot>();
-		GenericLabel label = new GenericLabel("Coin Exchanger");
-		label.setX(15).setY(15);
+		Label label = new Label(8, 8, "Coin Exchanger");
 		widgets.add(label);
 		ActionSlot slot1 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input1_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input1_Y")), this);
 		addSlot(slot1);
@@ -46,6 +49,13 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener
 		ActionSlot slot4 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Output2_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Output2_Y")), this);
 		slot4.setReadOnly(true);
 		addSlot(slot4);
+		ActionButton but = new ActionButton(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Y")));
+		but.setText("Exchange");
+		but.setWidth(20);
+		but.setHeight(10);
+		but.setFixed(true);
+		but.addListener(this);
+		widgets.add(but);
 		invWidget.initGUI();
 	}
 	
@@ -97,58 +107,6 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener
 	{
 		if(source.isReadOnly())
 			return false;
-		if(source == slots.get(0) || source == slots.get(1))
-		{
-			ItemStack in1 = slots.get(0).getItem();
-			ItemStack in2 = slots.get(1).getItem();
-			SpoutItemStack workingStack;
-			if(in1.getType() != Material.AIR)
-				workingStack = new SpoutItemStack(in1);
-			else if(in2.getType() != Material.AIR && in1.getType() == Material.AIR)
-				workingStack = new SpoutItemStack(in2);
-			else
-				return true;
-			
-			ArrayList<Coin> coinList = CoinManager.coinList;
-			int index = 0;
-			boolean coin = false;
-			for(int i = 0; i < coinList.size(); i++)
-			{
-				if(workingStack.isSimilar(new SpoutItemStack(coinList.get(i))))
-				{
-					coin = true;
-					index = i;
-				}
-			}
-			if(!coin)
-				return false;
-		
-			if(in1.getType() == in2.getType())
-				workingStack.setAmount(workingStack.getAmount() + in2.getAmount());
-			
-
-				if(workingStack.getAmount() > coinList.get(index + 1).getValue()/coinList.get(index).getValue() && index != coinList.size() - 2)
-				{
-					ActionSlot outputSlot = slots.get(2);
-				    outputSlot.setItem(new SpoutItemStack(coinList.get(index + 1)));
-				}
-				else if(index > 0)
-				{
-					ActionSlot outputSlot1 = slots.get(2);
-					ActionSlot outputSlot2 = slots.get(3);
-					if(coinList.get(index).getValue()/coinList.get(index - 1).getValue() > 64)
-					{
-						SpoutItemStack stack = new SpoutItemStack(coinList.get(index - 1));
-						stack.setAmount(64);
-						outputSlot1.setItem(stack);
-						SpoutItemStack stack2 = new SpoutItemStack(coinList.get(index - 1));
-						stack.setAmount(coinList.get(index).getValue()/coinList.get(index - 1).getValue() - 64);
-						outputSlot2.setItem(stack2);
-					}
-				}
-				else
-					return true;
-		}
 		return true;
 	}
 
@@ -162,5 +120,57 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener
 	public void onItemShiftClicked(ActionSlot source)
 	{
 		
+	}
+
+	@Override
+	public void onButtonClicked(ButtonClickEvent ev)
+	{
+		SpoutItemStack stack1 = new SpoutItemStack(slots.get(0).getItem());
+		SpoutItemStack stack2 = new SpoutItemStack(slots.get(1).getItem());
+		Coin coin1 = CoinManager.getCoinByMaterial(stack1.getMaterial().getName());
+		Coin coin2 = CoinManager.getCoinByMaterial(stack2.getMaterial().getName());
+		
+		SpoutItemStack workingStack;
+		
+		if(coin1 == null && coin2 == null)
+			return;
+		if(coin1 != null)
+		{
+			workingStack = stack1;
+			if(coin1 == coin2)
+				workingStack.setAmount(workingStack.getAmount() + stack2.getAmount());
+		}
+		else
+		{
+			workingStack = stack2;
+		}
+		
+		int currentCoinIndex = CoinManager.coinList.indexOf(coin1 == null ? coin2 : coin1);
+		int coinsToNextTier = -1;
+		int coinsToLowerTier = -1;
+		if(currentCoinIndex != CoinManager.coinList.size() - 1)
+			coinsToNextTier = CoinManager.coinList.get(currentCoinIndex + 1).getValue()/(coin1 == null ? coin2.getValue() : coin1.getValue());
+		if(currentCoinIndex >= 1)
+			coinsToLowerTier = (coin1 == null ? coin2.getValue() : coin1.getValue())/CoinManager.coinList.get(currentCoinIndex - 1).getValue();
+		if(coinsToLowerTier == -1 && coinsToNextTier == -1)
+			return;
+		int currentAmount = workingStack.getAmount();
+		if(coinsToNextTier != -1 && coinsToNextTier <= currentAmount)
+		{
+			int outputCoins = workingStack.getAmount()/coinsToNextTier;
+			workingStack.setAmount(workingStack.getAmount()%coinsToNextTier);
+			slots.get(0).setItem(workingStack);
+			slots.get(1).setItem(new ItemStack(Material.AIR));
+			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex + 1));
+			MorgulPlugin.debug("" + currentCoinIndex);
+			newCoins.setAmount(outputCoins);
+			slots.get(2).setItem(newCoins);
+		}
+		else if(coinsToLowerTier != -1 && coinsToNextTier > currentAmount)
+		{
+			
+		}
+		else 
+			return;
 	}
 }
