@@ -37,7 +37,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		invWidget = new InventoryWidget(pl, Integer.parseInt(Config.get(CONF_FILE, SECTION, "CoinExchanger_Width")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "CoinExchanger_Height")), this);
 		widgets = new ArrayList<Widget>();
 		slots = new ArrayList<ActionSlot>();
-		Label label = new Label(8, 8, "Coin Exchanger");
+		Label label = new Label(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Label_PopupName_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Label_PopupName_Y")), Config.get(CONF_FILE, SECTION, "Label_PopupName_Text"));
 		widgets.add(label);
 		ActionSlot slot1 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input1_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input1_Y")), this);
 		addSlot(slot1);
@@ -50,9 +50,9 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		slot4.setReadOnly(true);
 		addSlot(slot4);
 		ActionButton but = new ActionButton(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Y")));
-		but.setText("Exchange");
-		but.setWidth(20);
-		but.setHeight(10);
+		but.setText(Config.get(CONF_FILE, SECTION, "Button_Exchange_Text"));
+		but.setWidth(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Width")));
+		but.setHeight(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Height")));
 		but.setFixed(true);
 		but.addListener(this);
 		widgets.add(but);
@@ -155,6 +155,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		if(coinsToLowerTier == -1 && coinsToNextTier == -1)
 			return;
 		int currentAmount = workingStack.getAmount();
+		MorgulPlugin.debug("Coins to higher - " + coinsToNextTier + "| Coins to lower - " + coinsToLowerTier + "| Coin Index - " + currentCoinIndex + "| Coin amount - " + currentAmount);
 		if(coinsToNextTier != -1 && coinsToNextTier <= currentAmount)
 		{
 			int outputCoins = workingStack.getAmount()/coinsToNextTier;
@@ -162,13 +163,38 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 			slots.get(0).setItem(workingStack);
 			slots.get(1).setItem(new ItemStack(Material.AIR));
 			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex + 1));
-			MorgulPlugin.debug("" + currentCoinIndex);
 			newCoins.setAmount(outputCoins);
 			slots.get(2).setItem(newCoins);
 		}
-		else if(coinsToLowerTier != -1 && coinsToNextTier > currentAmount)
+		else if(coinsToLowerTier != -1 && (coinsToNextTier > currentAmount || coinsToNextTier == -1))
 		{
+			int outputCoins = CoinManager.coinList.get(currentCoinIndex).getValue()/CoinManager.coinList.get(currentCoinIndex - 1).getValue();
+			workingStack.setAmount(workingStack.getAmount() - 1);
+			SpoutItemStack secondInput = new SpoutItemStack(new ItemStack(Material.AIR));
+			if(workingStack.getAmount() > 64)
+			{
+				secondInput = workingStack;
+				secondInput.setAmount(workingStack.getAmount() - 64);
+				workingStack.setAmount(64);
+			}
+			if(workingStack.getAmount() == 0)
+				workingStack = new SpoutItemStack(new ItemStack(Material.AIR));
+			slots.get(0).setItem(workingStack);
+			slots.get(1).setItem(secondInput);
 			
+			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex - 1));
+			newCoins.setAmount(outputCoins);
+			
+			SpoutItemStack secondOutput = new SpoutItemStack(new ItemStack(Material.AIR));
+			if(newCoins.getAmount() > 64)
+			{
+				secondOutput = newCoins;
+				secondOutput.setAmount(newCoins.getAmount() - 64);
+				newCoins.setAmount(64);
+			}
+			
+			slots.get(2).setItem(newCoins);
+			slots.get(3).setItem(secondOutput);
 		}
 		else 
 			return;
