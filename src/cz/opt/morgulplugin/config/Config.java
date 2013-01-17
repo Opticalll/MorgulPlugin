@@ -29,6 +29,7 @@ public class Config
 		fileList.add("player.conf");
 		fileList.add("coins.conf");
 		fileList.add("gui.conf");
+		fileList.add("hunt.conf");
 		configMap = new HashMap<String, HashMap<String, HashMap<String, String>>>();
 		createConfigs();
 		if(!loadConfig())

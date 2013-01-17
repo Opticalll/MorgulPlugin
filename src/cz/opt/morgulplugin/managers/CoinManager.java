@@ -5,9 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
 
+import cz.opt.morgulplugin.MorgulPlugin;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.item.Coin;
 
@@ -49,5 +50,26 @@ public class CoinManager
 			   }
 		}
 		);
+	}
+	
+	public static void dropCoins(Location loc, int value)
+	{
+		ArrayList<SpoutItemStack> coins = new ArrayList<SpoutItemStack>();
+		for(int i = coinList.size() - 1; i > -1; i--)
+		{
+			int coinNumber = value/coinList.get(i).getValue();
+			MorgulPlugin.debug(coinList.get(i).getValue() + "=" + coinNumber);
+			if(coinNumber == 0)
+				continue;
+			else
+			{
+				SpoutItemStack coin = new SpoutItemStack(coinList.get(i));
+				coin.setAmount(coinNumber);
+				coins.add(coin);
+				value = value%coinList.get(i).getValue();
+			}
+		}
+		for(int i = 0; i < coins.size(); i++)
+			loc.getWorld().dropItem(loc, coins.get(i));
 	}
 }

@@ -179,8 +179,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 			}
 			if(workingStack.getAmount() == 0)
 				workingStack = new SpoutItemStack(new ItemStack(Material.AIR));
-			slots.get(0).setItem(workingStack);
-			slots.get(1).setItem(secondInput);
+
 			
 			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex - 1));
 			newCoins.setAmount(outputCoins);
@@ -193,6 +192,8 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 				newCoins.setAmount(64);
 			}
 			
+			slots.get(0).setItem(workingStack);
+			slots.get(1).setItem(secondInput);
 			slots.get(2).setItem(newCoins);
 			slots.get(3).setItem(secondOutput);
 		}

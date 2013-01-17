@@ -17,12 +17,14 @@ import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.event.CommandEvent;
 import cz.opt.morgulplugin.eventmanager.BlockEventManager;
 import cz.opt.morgulplugin.eventmanager.ChatEventManager;
+import cz.opt.morgulplugin.eventmanager.EntityEventManager;
 import cz.opt.morgulplugin.eventmanager.PlayerEventManager;
 import cz.opt.morgulplugin.eventmanager.SpoutEventManager;
 import cz.opt.morgulplugin.managers.ChatManager;
 import cz.opt.morgulplugin.managers.CoinManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
+import cz.opt.morgulplugin.managers.HuntManager;
 import cz.opt.morgulplugin.managers.LoginManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
 import cz.opt.morgulplugin.managers.SocketManager;
@@ -80,6 +82,8 @@ public final class MorgulPlugin extends JavaPlugin
 			MorgulPlugin.log("EconomyManager Init.");
 			StatManager.init();
 			MorgulPlugin.log("StatManager Init.");
+			HuntManager.init();
+			MorgulPlugin.log("HuntManager Init.");
 			SocketManager.init();
 			MorgulPlugin.log("SocketManager Init.");
 		}	
@@ -106,6 +110,7 @@ public final class MorgulPlugin extends JavaPlugin
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new BlockEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new SpoutEventManager(), this);
+		this.getServer().getPluginManager().registerEvents(new EntityEventManager(), this);
 	}
 	
 	@Override
