@@ -210,6 +210,11 @@ public class ChatManager implements CommandListener
 					e.getSender().sendMessage("Tento kanal uz existuje.");
 					return true;
 				}
+				if(e.getArgs()[1].equalsIgnoreCase("all") || e.getArgs()[1].equalsIgnoreCase("world"))
+				{
+					e.getSender().sendMessage("Takto se kanal jmenovat nemuze.");
+					return true;
+				}
 				channels.put(e.getArgs()[1].toLowerCase(), new ChatChannel(PlayerManager.getPlayer(e.getSender().getName()), e.getArgs()[1]));
 				if(e.getArgs().length > 2)
 					channels.get(e.getArgs()[1].toLowerCase()).setPassword(LoginManager.hashMD5(e.getArgs()[2]));

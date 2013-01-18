@@ -52,9 +52,13 @@ commands:
       usage: /<command> [player] [message]
       permission: MorgulPlugin.whisper
       permission-message: You don't have permission for MorgulPlugin
-   
    stats:
       description: Stats command.
       usage: /<command> [player] [message]
       permission: MorgulPlugin.stats
+      permission-message: You don't have permission for MorgulPlugin
+   lang:
+      description: Sets language.
+      usage: /<command> [language]
+      permission: MorgulPlugin.lang
       permission-message: You don't have permission for MorgulPlugin

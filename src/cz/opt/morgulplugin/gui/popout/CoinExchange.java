@@ -160,8 +160,13 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		{
 			int outputCoins = workingStack.getAmount()/coinsToNextTier;
 			workingStack.setAmount(workingStack.getAmount()%coinsToNextTier);
+			if(workingStack.getAmount() == 0)
+				slots.get(0).setItem(new ItemStack(Material.AIR));
 			slots.get(0).setItem(workingStack);
-			slots.get(1).setItem(new ItemStack(Material.AIR));
+			if(!new SpoutItemStack(slots.get(1).getItem()).getMaterial().getName().equalsIgnoreCase(workingStack.getMaterial().getName()))
+				slots.get(1).setItem(slots.get(1).getItem());
+			else
+				slots.get(1).setItem(new ItemStack(Material.AIR));
 			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex + 1));
 			newCoins.setAmount(outputCoins);
 			slots.get(2).setItem(newCoins);
@@ -173,7 +178,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 			SpoutItemStack secondInput = new SpoutItemStack(new ItemStack(Material.AIR));
 			if(workingStack.getAmount() > 64)
 			{
-				secondInput = workingStack;
+				secondInput = new SpoutItemStack(workingStack);
 				secondInput.setAmount(workingStack.getAmount() - 64);
 				workingStack.setAmount(64);
 			}
@@ -182,15 +187,36 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 
 			
 			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex - 1));
-			newCoins.setAmount(outputCoins);
+			newCoins.setAmount(0);
+			if(newCoins.getMaterial().getName().equalsIgnoreCase(new SpoutItemStack(slots.get(2).getItem()).getMaterial().getName()))
+				newCoins.setAmount(slots.get(2).getItem().getAmount());
+			else if(slots.get(2).getItem().getType() != Material.AIR)
+			{
+				invWidget.eject(slots.get(2).getItem());
+				slots.get(2).setItem(new ItemStack(Material.AIR));
+			}
+			newCoins.setAmount(outputCoins + newCoins.getAmount());
 			
 			SpoutItemStack secondOutput = new SpoutItemStack(new ItemStack(Material.AIR));
 			if(newCoins.getAmount() > 64)
 			{
-				secondOutput = newCoins;
-				secondOutput.setAmount(newCoins.getAmount() - 64);
+				secondOutput = new SpoutItemStack(newCoins);
+				secondOutput.setAmount(0);
+				if(new SpoutItemStack(slots.get(3).getItem()).getMaterial().getName().equalsIgnoreCase(secondOutput.getMaterial().getName()))
+					secondOutput.setAmount(slots.get(3).getItem().getAmount());
+				secondOutput.setAmount(newCoins.getAmount() - 64 + secondOutput.getAmount());
 				newCoins.setAmount(64);
 			}
+			
+			if(secondOutput.getAmount() > 64)
+			{
+				SpoutItemStack eject = new SpoutItemStack(secondOutput);
+				eject.setAmount(secondOutput.getAmount() - 64);
+				secondOutput.setAmount(64);
+				invWidget.eject(eject);
+			}
+			
+			
 			
 			slots.get(0).setItem(workingStack);
 			slots.get(1).setItem(secondInput);

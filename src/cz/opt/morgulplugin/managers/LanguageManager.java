@@ -28,14 +28,46 @@ public class LanguageManager implements CommandListener
 		CommandManager.registerListener("lang", instance);
 	}
 	
-	public static void getText(MorgPlayer pl, String textKey)
+	public static void sendText(MorgPlayer pl, String textKey, String sufix)
 	{
-		
+		pl.getPlayer().sendMessage(fileMap.get(pl.getLanguage()).get(textKey) + sufix);
+	}
+	
+	public static void sendText(MorgPlayer pl, String textKey)
+	{
+		pl.getPlayer().sendMessage(fileMap.get(pl.getLanguage()).get(textKey));
+	}
+	public static void sendText(MorgPlayer pl, String prefix, String textKey, String sufix)
+	{
+		pl.getPlayer().sendMessage(prefix + fileMap.get(pl.getLanguage()).get(textKey) + sufix);
 	}
 	
 	@Override
 	public boolean onCommand(CommandEvent e)
 	{
+		if(e.getCommand().getName().equalsIgnoreCase("lang"))
+		{
+			String avLangs = "";
+			for(int i = 0; i < languages.size(); i++)
+				avLangs += languages.get(i) + ", ";
+			if(e.getArgs().length < 1)
+			{
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "LanguageManager_Lang_NoParams", avLangs);
+				return true;
+			}
+			if(!languages.contains(e.getArgs()[0].toLowerCase()))
+			{
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "LanguageManager_Lang_NoSuchLang", avLangs);
+				return true;
+			}
+			else
+			{
+				PlayerManager.getPlayer(e.getSender().getName()).setLanguage(e.getArgs()[0].toLowerCase());
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "LanguageManager_Lang_LangChanged");
+				return true;
+			}
+		}
+			
 		return true;
 	}
 

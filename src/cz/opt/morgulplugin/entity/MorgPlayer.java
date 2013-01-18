@@ -275,6 +275,8 @@ public class MorgPlayer
 	
 	public void addChannel(ChatChannel e)
 	{
+		if(chatSt.getChannel().equalsIgnoreCase(e.getName()))
+			chatSt.setChannel("All");
 		chatChannels.add(e);
 	}
 	

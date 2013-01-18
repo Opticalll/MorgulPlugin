@@ -25,6 +25,7 @@ import cz.opt.morgulplugin.managers.CoinManager;
 import cz.opt.morgulplugin.managers.CommandManager;
 import cz.opt.morgulplugin.managers.EconomyManager;
 import cz.opt.morgulplugin.managers.HuntManager;
+import cz.opt.morgulplugin.managers.LanguageManager;
 import cz.opt.morgulplugin.managers.LoginManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
 import cz.opt.morgulplugin.managers.SocketManager;
@@ -84,6 +85,8 @@ public final class MorgulPlugin extends JavaPlugin
 			MorgulPlugin.log("StatManager Init.");
 			HuntManager.init();
 			MorgulPlugin.log("HuntManager Init.");
+			LanguageManager.init();
+			MorgulPlugin.log("LanguageManager Init.");
 			SocketManager.init();
 			MorgulPlugin.log("SocketManager Init.");
 		}	

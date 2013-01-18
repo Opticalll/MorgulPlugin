@@ -82,8 +82,15 @@ public class ChatChannel
 	{
 		if(players.size() < maxPlayers)
 		{
-			players.add(pl);
-			pl.addChannel(this);
+			if(players.contains(pl))
+			{
+				pl.getPlayer().sendMessage("V tomto kanalu jiz ste.");
+			}
+			else
+			{
+				players.add(pl);
+				pl.addChannel(this);
+			}
 		}
 		else
 			pl.getPlayer().sendMessage("Kanal je plny.");
