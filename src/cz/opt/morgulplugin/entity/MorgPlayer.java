@@ -31,6 +31,7 @@ public class MorgPlayer
 	private long minedBlocks;
 	private boolean logged;
 	private String name;
+	private String language;
 	private Player pl;
 	private SpoutPlayer spl;
 	private Hashtable<String, Stat> stats;
@@ -96,6 +97,7 @@ public class MorgPlayer
 		id = Integer.parseInt(rs.get(1).get("id"));
 		logLoc = Utils.getLocFromString(rs.get(1).get("location"), pl.getWorld());
 		lastPlayed = Long.parseLong(rs.get(1).get("lastplayed"));
+		language = rs.get(1).get("lang");
 		rs = DataBase.query("SELECT * FROM player_accounts WHERE id='" + id + "'");
 		m_coins = Integer.parseInt(rs.get(1).get("morgul_coins"));
 		
@@ -133,6 +135,7 @@ public class MorgPlayer
 		logLoc = Utils.getLocFromString(rs.get(1).get("location"), pl.getWorld());
 		lastPlayed = Long.parseLong(rs.get(1).get("lastplayed"));
 		minedBlocks = 0L;
+		language = "en";
 		
 		initDatabase();
 		
@@ -170,7 +173,7 @@ public class MorgPlayer
 	
 	public void disconnected()
 	{
-		DataBase.update("UPDATE players SET location='" + Utils.getLocAsString(getPlayer().getLocation()) + "', lastplayed='" + System.currentTimeMillis() + "' WHERE id='" + id + "'");
+		DataBase.update("UPDATE players SET location='" + Utils.getLocAsString(getPlayer().getLocation()) + "', lastplayed='" + System.currentTimeMillis() + "', lang='" + language + "' WHERE id='" + id + "'");
 		commitStats();
 	}
 	
@@ -293,5 +296,15 @@ public class MorgPlayer
 	public void setSpoutPlayer(SpoutPlayer spl)
 	{
 		this.spl = spl;
+	}
+
+	public String getLanguage()
+	{
+		return language;
+	}
+
+	public void setLanguage(String language)
+	{
+		this.language = language.toLowerCase();
 	}
 }
