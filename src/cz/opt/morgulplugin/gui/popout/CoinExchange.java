@@ -175,7 +175,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		{
 			int outputCoins = CoinManager.coinList.get(currentCoinIndex).getValue()/CoinManager.coinList.get(currentCoinIndex - 1).getValue();
 			workingStack.setAmount(workingStack.getAmount() - 1);
-			SpoutItemStack secondInput = new SpoutItemStack(new ItemStack(Material.AIR));
+			SpoutItemStack secondInput = new SpoutItemStack(slots.get(1).getItem());
 			if(workingStack.getAmount() > 64)
 			{
 				secondInput = new SpoutItemStack(workingStack);

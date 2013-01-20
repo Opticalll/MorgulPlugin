@@ -1,7 +1,7 @@
 package cz.opt.morgulplugin.managers;
 
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,9 +21,8 @@ public class LanguageManager implements CommandListener
 	public static void init()
 	{
 		fileMap = Config.getFileMap(CONFIG_FILE);
-		String[] keys = null;
-		fileMap.keySet().toArray(keys);
-		languages = Arrays.asList(keys);
+		languages = new ArrayList<String>();
+		languages.addAll(fileMap.keySet());
 		instance = new LanguageManager();
 		CommandManager.registerListener("lang", instance);
 	}

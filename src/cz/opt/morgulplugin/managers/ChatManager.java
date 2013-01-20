@@ -86,7 +86,7 @@ public class ChatManager implements CommandListener
 				    msg += e.getArgs()[i]; 
 				if(msg.length() > 242)
 				{
-					e.getSender().sendMessage("Zprava je prilis dlouha.");
+					LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Message_MsgTooLong");
 					return true;
 				}
 				e.getSender().sendMessage(senderName + msg);
@@ -95,7 +95,7 @@ public class ChatManager implements CommandListener
 			}
 			else
 			{
-				e.getSender().sendMessage("Hrac Jmenem " + e.getArgs()[0] + " neexistuje.");
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Message_PlayerDoesntExist", e.getArgs()[0]);
 				return true;
 			}
 		}
@@ -123,13 +123,13 @@ public class ChatManager implements CommandListener
 				}
 				else
 				{
-					e.getSender().sendMessage("Nejste pripojen k tomuto kanalu.");
+					LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Chat_NotConnected", e.getArgs()[0]);
 					return true;
 				}
 			}
 			else
 			{
-				e.getSender().sendMessage("Syntaxe je /chat [channel]");
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Chat_Syntax", e.getArgs()[0]);
 				return true;
 			}
 		}
@@ -137,36 +137,36 @@ public class ChatManager implements CommandListener
 		{
 			if(e.getArgs().length < 1)
 			{
-				e.getSender().sendMessage("Commands Are Channel Create Delete Join Disconnect List.");
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Channel_Commands", " Create Delete Join Disconnect List.");
 				return true;
 			}
 			else if(e.getArgs()[0].equalsIgnoreCase("join"))
 			{
 				if(e.getArgs().length < 2)
 				{
-					e.getSender().sendMessage("Syntaxe je /channel join [kanal] [password]");
+					LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Channel_Join_Syntax");
 					return true;
 				}
 				if(channels.get(e.getArgs()[1].toLowerCase()) == null)
 				{
-					e.getSender().sendMessage("Kanal neexistuje");
+					LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Channel_Join_ChannelDoesntExist");
 					return true;
 				}
 				if(channels.get(e.getArgs()[1].toLowerCase()).isPassword())
 				{
 					if(e.getArgs().length < 3)
 					{
-						e.getSender().sendMessage("Kanal je zaheslovan zadejte heslo.");
+						LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Channel_Join_ChannelHasPassword");
 						return true;
 					}
 					if(!channels.get(e.getArgs()[1].toLowerCase()).getPassword().equals(LoginManager.hashMD5(e.getArgs()[2])))
 					{
-						e.getSender().sendMessage("Heslo je nespravne");
+						LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Channel_Join_WrongPassword");
 						return true;
 					}
 				}
 				PlayerManager.getPlayer(e.getSender().getName()).joinChannel(channels.get(e.getArgs()[1].toLowerCase()));
-				e.getSender().sendMessage("Pripojen.");
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Channel_Join_Joined");
 				return true;
 			}
 			else if(e.getArgs()[0].equalsIgnoreCase("disconnect"))

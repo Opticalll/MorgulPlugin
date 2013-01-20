@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.entity.MorgPlayer;
 import cz.opt.morgulplugin.managers.ChatManager;
+import cz.opt.morgulplugin.managers.LanguageManager;
 
 public class ChatChannel
 {
@@ -51,7 +52,7 @@ public class ChatChannel
 		if(channelManager == pl)
 			color = ChatColor.valueOf(arg);
 		else
-			pl.getPlayer().sendMessage("Nejste spravce tohoto kanalu.");
+			LanguageManager.sendText(pl, "ChatChannel_Channel_NotOwner");
 	}
 	
 	public void deleteChannel(MorgPlayer pl)
@@ -63,7 +64,7 @@ public class ChatChannel
 				pl.removeChannel(this);
 		}
 		else
-			pl.getPlayer().sendMessage("Nejste spravce tohoto kanalu.");
+			LanguageManager.sendText(pl, "ChatChannel_Channel_NotOwner");
 	}
 	
 	public void sendMsg(String msg)
@@ -83,9 +84,7 @@ public class ChatChannel
 		if(players.size() < maxPlayers)
 		{
 			if(players.contains(pl))
-			{
-				pl.getPlayer().sendMessage("V tomto kanalu jiz ste.");
-			}
+				LanguageManager.sendText(pl, "ChatChannel_Channel_ContainPl");
 			else
 			{
 				players.add(pl);
@@ -93,7 +92,7 @@ public class ChatChannel
 			}
 		}
 		else
-			pl.getPlayer().sendMessage("Kanal je plny.");
+			LanguageManager.sendText(pl, "ChatChannel_Channel_Full");
 	}
 	
 	public String getNameWithColor()

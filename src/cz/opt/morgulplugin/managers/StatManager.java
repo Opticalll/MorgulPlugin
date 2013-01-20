@@ -77,7 +77,7 @@ public class StatManager implements CommandListener
 			List<Stat> stats = Utils.mapToList(player.getStats());
 			for(Stat s : stats)
 				player.getPlayer().sendMessage("Stat: " + s.getName() + " | XP: " + s.getXP() + ", LVL: " + s.getLevel());
-			player.getPlayer().sendMessage("Destroyed blocks: " + player.getMinedBlocks());
+			LanguageManager.sendText(PlayerManager.getPlayer(player.getPlayer().getName()), "StatManager_Stats_DestroyedBlocks"," " + player.getMinedBlocks());
 			return true;
 		}
 		

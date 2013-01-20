@@ -63,7 +63,8 @@ public class LoginManager implements CommandListener
 		if(rs.get(1).get("pass").isEmpty())
 		{
 			setNewPass(pass);
-			logingPlayer.sendMessage("Heslo Nastaveno.");
+			LanguageManager.sendText(PlayerManager.getPlayer(logingPlayer.getName()), "LoginManager_Login_NewPass");
+			
 			return true;
 		}
 		if(pass.equals(rs.get(1).get("pass")))
@@ -81,23 +82,22 @@ public class LoginManager implements CommandListener
 	@Override
 	public boolean onCommand(CommandEvent e)
 	{
-		MorgulPlugin.log("Cmd Passed.");
 		if(e.getCommand().getName().equalsIgnoreCase("login") && e.getSender().getName().equalsIgnoreCase(logingPlayer.getName()))
 		{
 			if(e.getArgs().length > 1)
 			{
-				logingPlayer.sendMessage("Heslo nesmi obsahovat mezery.");
+				LanguageManager.sendText(PlayerManager.getPlayer(logingPlayer.getName()), "LoginManager_Login_NoSpaces");
 				return true;
 			}
 			if(e.getArgs().length < 1)
 			{
-				logingPlayer.sendMessage("Syntaxe je /login [Heslo]");
+				LanguageManager.sendText(PlayerManager.getPlayer(logingPlayer.getName()), "LoginManager_Login_Syntax");
 				return true;
 			}
 			MorgulPlugin.debug("Player login.");
 			if(checkPassword(LoginManager.hashMD5(e.getArgs()[0])))
 			{
-				logingPlayer.sendMessage("Loged.");
+				LanguageManager.sendText(PlayerManager.getPlayer(logingPlayer.getName()), "LoginManager_Login_Logged");
 				PlayerManager.getPlayer(logingPlayer.getName()).setLogged(true);
 				PlayerManager.removeLoginManager(this);
 				CommandManager.removeListener("login", this);
@@ -108,12 +108,10 @@ public class LoginManager implements CommandListener
 			}
 			else
 			{
-				logingPlayer.sendMessage("Heslo neni spravne.");
+				LanguageManager.sendText(PlayerManager.getPlayer(logingPlayer.getName()), "LoginManager_Login_WrongPass");
 				return true;
 			}
 		}
-		else
-			e.getSender().sendMessage("wtf");
 		return false;
 	}
 
