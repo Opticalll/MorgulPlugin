@@ -173,8 +173,11 @@ public class MorgPlayer
 	
 	public void disconnected()
 	{
-		DataBase.update("UPDATE players SET location='" + Utils.getLocAsString(getPlayer().getLocation()) + "', lastplayed='" + System.currentTimeMillis() + "', lang='" + language + "' WHERE id='" + id + "'");
-		commitStats();
+		if(logged)
+		{
+			DataBase.update("UPDATE players SET location='" + Utils.getLocAsString(getPlayer().getLocation()) + "', lastplayed='" + System.currentTimeMillis() + "', lang='" + language + "' WHERE id='" + id + "'");
+			commitStats();
+		}
 	}
 	
 	
@@ -275,8 +278,6 @@ public class MorgPlayer
 	
 	public void addChannel(ChatChannel e)
 	{
-		if(chatSt.getChannel().equalsIgnoreCase(e.getName()))
-			chatSt.setChannel("All");
 		chatChannels.add(e);
 	}
 	
