@@ -37,6 +37,7 @@ public class InventoryWidget extends InventoryView
 	private InventoryViewExtention extend;
 
 	private List<InventorySlot> slots = new ArrayList<InventorySlot>();
+	private PopupScreen popup;
 
 	public InventoryWidget(SpoutPlayer p, int width, int height, InventoryViewExtention ext) 
 	{
@@ -66,7 +67,7 @@ public class InventoryWidget extends InventoryView
 			cont.addChild(slots.get(i));
 		for(int z = 0; z < extend.getWidgets().size(); z++)
 			cont.addChild(extend.getWidgets().get(z));
-		pl.getMainScreen().attachPopupScreen((PopupScreen) new GenericPopup() 
+		pl.getMainScreen().attachPopupScreen(popup = (PopupScreen) new GenericPopup() 
 		{
 			@Override
 			public void onScreenClose(ScreenCloseEvent e)
@@ -126,6 +127,12 @@ public class InventoryWidget extends InventoryView
 		}
 	}
 	
+	
+	public PopupScreen getPopup()
+	{
+		return popup;
+	}
+
 	protected int addSlot(InventorySlot slot) 
 	{
 		if(slots.contains(slot)) 
@@ -178,7 +185,7 @@ public class InventoryWidget extends InventoryView
 	@Override
 	public InventoryType getType()
 	{
-		return InventoryType.CHEST;
+		return InventoryType.PLAYER;
 	}
 
 }

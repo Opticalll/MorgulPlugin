@@ -89,9 +89,10 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		for(int i = 0; i < slots.size(); i++)
 		{
 			ActionSlot slot = slots.get(i);
-			if(slot.getItem().getType() != Material.AIR && !slots.get(i).isReadOnly())
+			if(slot.getItem().getType() != Material.AIR)
 				invWidget.eject(slot.getItem());
 		}
+		MorgulPlugin.log("Exchanger Closed.");
 	}
 
 	@Override
@@ -143,7 +144,10 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		else
 		{
 			workingStack = stack2;
+			slots.get(1).setItem(new ItemStack(Material.AIR));
 		}
+		
+		boolean ejected = false;
 		
 		int currentCoinIndex = CoinManager.coinList.indexOf(coin1 == null ? coin2 : coin1);
 		int coinsToNextTier = -1;
@@ -169,13 +173,25 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 				slots.get(1).setItem(new ItemStack(Material.AIR));
 			SpoutItemStack newCoins = new SpoutItemStack(CoinManager.coinList.get(currentCoinIndex + 1));
 			newCoins.setAmount(outputCoins);
+			if(!new SpoutItemStack(slots.get(2).getItem()).getMaterial().getName().equalsIgnoreCase(newCoins.getMaterial().getName()))
+			{
+				invWidget.eject(slots.get(2).getItem());
+				ejected = true;
+			}
+			else
+				newCoins.setAmount(slots.get(2).getItem().getAmount() + newCoins.getAmount());
 			slots.get(2).setItem(newCoins);
 		}
 		else if(coinsToLowerTier != -1 && (coinsToNextTier > currentAmount || coinsToNextTier == -1))
 		{
 			int outputCoins = CoinManager.coinList.get(currentCoinIndex).getValue()/CoinManager.coinList.get(currentCoinIndex - 1).getValue();
 			workingStack.setAmount(workingStack.getAmount() - 1);
+			if(!new SpoutItemStack(slots.get(1).getItem()).getMaterial().getName().equalsIgnoreCase(workingStack.getMaterial().getName()))
+				slots.get(1).setItem(slots.get(1).getItem());
+			else
+				slots.get(1).setItem(new ItemStack(Material.AIR));
 			SpoutItemStack secondInput = new SpoutItemStack(slots.get(1).getItem());
+			
 			if(workingStack.getAmount() > 64)
 			{
 				secondInput = new SpoutItemStack(workingStack);
@@ -193,6 +209,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 			else if(slots.get(2).getItem().getType() != Material.AIR)
 			{
 				invWidget.eject(slots.get(2).getItem());
+				ejected = true;
 				slots.get(2).setItem(new ItemStack(Material.AIR));
 			}
 			newCoins.setAmount(outputCoins + newCoins.getAmount());
@@ -214,6 +231,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 				eject.setAmount(secondOutput.getAmount() - 64);
 				secondOutput.setAmount(64);
 				invWidget.eject(eject);
+				ejected = true;
 			}
 			
 			
@@ -225,5 +243,10 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 		}
 		else 
 			return;
+		if(ejected)
+		{
+			this.onScreenClose(new ScreenCloseEvent(invWidget.getPopup().getPlayer(), invWidget.getPopup().getScreen(), invWidget.getPopup().getScreenType()));
+			this.invWidget.getPopup().close();
+		}
 	}
 }
