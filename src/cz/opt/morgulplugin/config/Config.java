@@ -30,6 +30,7 @@ public class Config
 		fileList.add("coins.conf");
 		fileList.add("gui.conf");
 		fileList.add("hunt.conf");
+		fileList.add("lang.conf");
 		configMap = new HashMap<String, HashMap<String, HashMap<String, String>>>();
 		createConfigs();
 		if(!loadConfig())

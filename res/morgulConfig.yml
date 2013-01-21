@@ -1,0 +1,30 @@
+[DataBase]
+host=
+database=
+port=
+user=
+pass=
+[Chat]
+Max_QuedMesseges=5
+[Login]
+timeout=120
+[System]
+debugmode=true
+[Player]
+Starting_Coins=50
+Starting_Xp=0
+Starting_Lvl=1
+[Stats]
+dirt=10
+[ChatChannel]
+plCountBasic=2
+plCountVip=15
+#Max PLayer Count
+worldPlCount=15
+[GUI]
+ChatStatus_X=0
+ChatStatus_Y=214
+#Background adjust its width 
+ChatStatus_Width=75
+#Background adjust its height
+ChatStatus_Height=10

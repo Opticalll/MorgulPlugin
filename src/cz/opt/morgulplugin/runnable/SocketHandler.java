@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import cz.opt.morgulplugin.MorgulPlugin;
+import cz.opt.morgulplugin.event.SocketEvent;
 import cz.opt.morgulplugin.managers.SocketManager;
 
 public class SocketHandler implements Runnable
@@ -39,11 +43,17 @@ public class SocketHandler implements Runnable
 			while((line = inRead.readLine()) != null)
 			{
 				msg += line + "\n";
-				
+				MorgulPlugin.debug("--" + line + "--");
 				if(line.endsWith("{OP}"))
 				{
 					MorgulPlugin.debug("Event Send");
-					SocketManager.fireSocketInputEvent(msg);
+//					List<String> parts = new ArrayList<String>();
+//					parts = Arrays.asList(msg.split(" "));
+//					String name = parts.get(0);
+//					parts.remove(0);
+//					String[] args = new String[0];
+//					parts.toArray(args);
+//					SocketManager.fireSocketInputEvent(new SocketEvent(this.socket, name, args));
 					msg = "";
 				}
 				MorgulPlugin.debug("Readed");

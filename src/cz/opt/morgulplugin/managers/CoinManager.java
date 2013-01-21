@@ -32,6 +32,8 @@ public class CoinManager
 	{
 		coinList = new ArrayList<Coin>();
 		HashMap<String, HashMap<String, String>> map = Config.getFileMap(CONFIGFILE);
+		if(map == null)
+			return;
 		Object[] keys = map.keySet().toArray();
 		for(int i = 0; i < keys.length; i++)
 		{

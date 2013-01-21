@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.SpoutManager;
 
+import cz.opt.morgulplugin.commands.SocketControl;
 import cz.opt.morgulplugin.commands.Test;
 import cz.opt.morgulplugin.config.Config;
 import cz.opt.morgulplugin.database.DataBase;
@@ -105,8 +106,9 @@ public final class MorgulPlugin extends JavaPlugin
 		CoinManager.init();
 		MorgulPlugin.log("CoinManager Init.");
 		CustomItem.setUpCache();
-		SpoutManager.getFileManager().addToCache(MorgulPlugin.thisPlugin, new File("Morgul/textures/coinExchange.png"));
+//		SpoutManager.getFileManager().addToCache(MorgulPlugin.thisPlugin, new File("Morgul/textures/coinExchange.png"));
 		new Test();
+		new SocketControl();
 		
 		
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);

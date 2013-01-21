@@ -27,7 +27,8 @@ public class CommandManager
 			listenerMap.put(command.toLowerCase(), temp);
 		}
 		else
-			listenerMap.get(command).add(listener);
+			if(!listenerMap.get(command).contains(listener))
+				listenerMap.get(command).add(listener);
 	}
 	
 	public static synchronized void removeListener(String command, CommandListener listener)
