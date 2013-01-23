@@ -31,7 +31,7 @@ public class ChatManager implements CommandListener
 		instance = new ChatManager();
 		channels = new Hashtable<String, ChatChannel>();
 		worldChannel = new ChatChannel();
-		MAX_QUED_MESSEGES = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Max_QuedMesseges"));
+		MAX_QUED_MESSEGES = Config.get(CONF_FILE, SECTION, "Max_QuedMesseges", 5);
 		CommandManager.registerListener("w", instance);
 		CommandManager.registerListener("msg", instance);
 		CommandManager.registerListener("whisper", instance);
@@ -79,11 +79,16 @@ public class ChatManager implements CommandListener
 			senderName = "[System]: ";
 		if(e.getCommand().getName().equalsIgnoreCase("w") || e.getCommand().getName().equalsIgnoreCase("msg") || e.getCommand().getName().equalsIgnoreCase("whisper"))
 		{
+			if(e.getArgs().length < 2)
+			{
+				LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Message_Syntax");
+				return true;
+			}
 			if(PlayerManager.playerExist(e.getArgs()[0]))
 			{
 				String msg = "";
 				for (int i = 1; i < e.getArgs().length; i++)
-				    msg += e.getArgs()[i]; 
+				    msg += e.getArgs()[i] + " "; 
 				if(msg.length() > 242)
 				{
 					LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Message_MsgTooLong");
@@ -106,6 +111,7 @@ public class ChatManager implements CommandListener
 				if(!e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") && channels.get(e.getArgs()[0].toLowerCase()) == null)
 				{
 					e.getSender().sendMessage("Kanal neexistuje.");
+					LanguageManager.sendText(PlayerManager.getPlayer(e.getSender().getName()), "ChatManager_Chat_ChannelDoesntExist");
 					return true;
 				}
 				if(e.getArgs()[0].toLowerCase().equalsIgnoreCase("all") || PlayerManager.getPlayer(e.getSender().getName()).getChatChannels().contains(channels.get(e.getArgs()[0].toLowerCase())))

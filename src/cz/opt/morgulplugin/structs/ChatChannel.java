@@ -28,7 +28,7 @@ public class ChatChannel
 		 * else
 		 *  maxPlayers = Integer.parseInt(Config.get(SECTION, plCountBasic));
 		 */
-		maxPlayers = Integer.parseInt(Config.get(CONF_FILE, SECTION, "plCountBasic"));
+		maxPlayers = Config.get(CONF_FILE, SECTION, "plCountBasic", 3);
 		players = new ArrayList<MorgPlayer>();
 		color = ChatColor.WHITE;
 		password = "";
@@ -41,7 +41,7 @@ public class ChatChannel
 		//Constructing general Chat;
 		name = "World";
 		channelManager = null;
-		maxPlayers = Integer.parseInt(Config.get(CONF_FILE, SECTION, "worldPlCount"));
+		maxPlayers = Config.get(CONF_FILE, SECTION, "worldPlCount", 20);
 		players = new ArrayList<MorgPlayer>();
 		color = ChatColor.WHITE;
 		ChatManager.addChannel(name, this);

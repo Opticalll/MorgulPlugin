@@ -18,7 +18,12 @@ public class SocketControl implements SocketListener
 	@Override
 	public void onSocketInputEvent(SocketEvent e)
 	{
-		MorgulPlugin.debug("Socekt Control COmmand Accepted - " + e);
+		MorgulPlugin.debug("Socekt Control COmmand Accepted - " + e.getCmdName() + " -- " + e.getArgs()[0]);
+		String s = "";
+		for(String f : e.getArgs())
+			s += f + " ";
+		MorgulPlugin.debug(s);
+		MorgulPlugin.thisPlugin.getServer().dispatchCommand(MorgulPlugin.thisPlugin.getServer().getConsoleSender(), s);
 	}
 
 }

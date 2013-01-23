@@ -9,10 +9,10 @@ public class ChatStatus
 {
 	private static final String CONF_FILE = "gui.conf";
 	private static final String SECTION = "ChatStatus";
-	private final int WIDTH = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_Width"));;
-	private final int HEIGHT = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_Height"));;
-	private final int X = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_X"));
-	private final int Y = Integer.parseInt(Config.get(CONF_FILE, SECTION, "ChatStatus_Y"));
+	private final int WIDTH = Config.get(CONF_FILE, SECTION, "ChatStatus_Width", 75);
+	private final int HEIGHT = Config.get(CONF_FILE, SECTION, "ChatStatus_Height", 10);
+	private final int X = Config.get(CONF_FILE, SECTION, "ChatStatus_X", 0);
+	private final int Y = Config.get(CONF_FILE, SECTION, "ChatStatus_Y", 214);
 	private GenericButton button;
 	private GenericLabel label;
 	private String channel;

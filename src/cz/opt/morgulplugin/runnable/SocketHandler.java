@@ -42,18 +42,18 @@ public class SocketHandler implements Runnable
 			String line;
 			while((line = inRead.readLine()) != null)
 			{
-				msg += line + "\n";
-				MorgulPlugin.debug("--" + line + "--");
+				msg += line;
 				if(line.endsWith("{OP}"))
 				{
-					MorgulPlugin.debug("Event Send");
-//					List<String> parts = new ArrayList<String>();
-//					parts = Arrays.asList(msg.split(" "));
-//					String name = parts.get(0);
-//					parts.remove(0);
-//					String[] args = new String[0];
-//					parts.toArray(args);
-//					SocketManager.fireSocketInputEvent(new SocketEvent(this.socket, name, args));
+					msg = msg.substring(0, line.length() - 4);
+					List<String> parts = new ArrayList<String>();
+					parts = Arrays.asList(msg.split(" "));
+					String name = parts.get(0).toLowerCase();
+					String[] args = new String[parts.size() - 1];
+					for(int i = 1; i < parts.size(); i++)
+						args[i-1] = parts.get(i);
+					MorgulPlugin.debug("Socket Incoming --" + line + "--");
+					SocketManager.fireSocketInputEvent(new SocketEvent(this.socket, name, args));
 					msg = "";
 				}
 				MorgulPlugin.debug("Readed");

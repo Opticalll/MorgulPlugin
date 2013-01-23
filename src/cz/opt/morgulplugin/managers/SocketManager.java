@@ -26,7 +26,8 @@ public class SocketManager
 	
 	static public synchronized void addSocketListener(String cmdName, SocketListener soc)
 	{
-		if(listeners.get(cmdName) != null)
+		cmdName = cmdName.toLowerCase();
+		if(listeners.get(cmdName) == null)
 		{
 			ArrayList<SocketListener> temp = new ArrayList<SocketListener>();
 			temp.add(soc);
@@ -40,6 +41,7 @@ public class SocketManager
 	
 	static public synchronized void removeSocketListener(String cmdName, SocketListener soc)
 	{
+		cmdName = cmdName.toLowerCase();
 		if(listeners.get(cmdName) != null)
 			if(listeners.get(cmdName).contains(soc))
 				listeners.get(cmdName).remove(soc);

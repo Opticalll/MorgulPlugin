@@ -161,11 +161,94 @@ public class Config
 		return true;
 	}
 
-	public static String get(String file, String section, String key)
+	public static String get(String file, String section, String key, String def)
 	{
 		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
 		HashMap<String, String> tileMap = fileMap.get(section); 
-		return (String) tileMap.get(key);
+		String out = tileMap.get(key);
+		if(out == null)
+		{
+			MorgulPlugin.log("[Warning]: Returning def Value [File]=" + file + " [Section]=" + section + " [Key]=" + key + " [Default_Value]=" + def);
+			return def;
+		}
+		else
+			return out;
+	}
+	
+	public static int get(String file, String section, String key, int def)
+	{
+		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
+		HashMap<String, String> tileMap = fileMap.get(section); 
+		String out = tileMap.get(key);
+		if(out == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Integer.parseInt(out);
+			} catch(NumberFormatException e) {
+				MorgulPlugin.log("[Warning]: Returning def Value [File]=" + file + " [Section]=" + section + " [Key]=" + key + " [Default_Value]=" + def);
+				return def;
+			}
+		}
+	}
+	
+	public static float get(String file, String section, String key, float def)
+	{
+		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
+		HashMap<String, String> tileMap = fileMap.get(section); 
+		String out = tileMap.get(key);
+		if(out == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Float.parseFloat(out);
+			} catch(NumberFormatException e) {
+				MorgulPlugin.log("[Warning]: Returning def Value [File]=" + file + " [Section]=" + section + " [Key]=" + key + " [Default_Value]=" + def);
+				return def;
+			}
+		}
+	}
+	
+	public static double get(String file, String section, String key, double def)
+	{
+		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
+		HashMap<String, String> tileMap = fileMap.get(section); 
+		String out = tileMap.get(key);
+		if(out == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Double.parseDouble(out);
+			} catch(NumberFormatException e) {
+				MorgulPlugin.log("[Warning]: Returning def Value [File]=" + file + " [Section]=" + section + " [Key]=" + key + " [Default_Value]=" + def);
+				return def;
+			}
+		}
+	}
+	
+	public static boolean get(String file, String section, String key, boolean def)
+	{
+		HashMap<String, HashMap<String, String>> fileMap = configMap.get(file);
+		HashMap<String, String> tileMap = fileMap.get(section); 
+		String out = tileMap.get(key);
+		if(out == null)
+			return def;
+		else
+		{
+			try
+			{
+				return Boolean.parseBoolean(out);
+			} catch(NumberFormatException e) {
+				MorgulPlugin.log("[Warning]: Returning def Value [File]=" + file + " [Section]=" + section + " [Key]=" + key + " [Default_Value]=" + def);
+				return def;
+			}
+		}
 	}
 	
 	public static HashMap<String, HashMap<String, String>> getFileMap(String file)

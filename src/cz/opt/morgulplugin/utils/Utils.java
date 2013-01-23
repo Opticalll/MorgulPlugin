@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -33,5 +34,23 @@ public class Utils
 		}
 		
 		return list;
+	}
+	
+	public static boolean isNight(String worldName)
+	{
+		Long now = Bukkit.getWorld(worldName).getTime();
+		if(now > 12000 || now < 0)
+			return true;
+		else
+			return false;
+	}
+	
+	public static boolean isDay(String worldName)
+	{
+		Long now = Bukkit.getWorld(worldName).getTime();
+		if(now < 12000 || now > 0)
+			return true;
+		else
+			return false;
 	}
 }

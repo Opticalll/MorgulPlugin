@@ -56,9 +56,9 @@ public class MorgPlayer
 
 	public static void init()
 	{
-		START_COINS = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Starting_Coins"));
-		START_XP = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Starting_Xp"));
-		START_LVL = Integer.parseInt(Config.get(CONF_FILE, SECTION, "Starting_Lvl"));
+		START_COINS = Config.get(CONF_FILE, SECTION, "Starting_Coins", 25);
+		START_XP = Config.get(CONF_FILE, SECTION, "Starting_Xp", 0);
+		START_LVL = Config.get(CONF_FILE, SECTION, "Starting_Lvl", 0);
 	}
 	
 	public MorgPlayer(String name, Player pl, boolean logged)

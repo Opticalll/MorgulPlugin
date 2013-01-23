@@ -23,16 +23,16 @@ public class DataBase
 	static String host;
 	static String pass;
 	static String user;
-	static String port;
+	static int port;
 	static String database;
 	
 	public static boolean setUp()
 	{
-		DataBase.host = Config.get(CONF_FILE, SECTION, "host");
-		DataBase.port = Config.get(CONF_FILE, SECTION, "port");
-		DataBase.database = Config.get(CONF_FILE, SECTION, "database");
-		DataBase.pass = Config.get(CONF_FILE, SECTION, "pass");
-		DataBase.user = Config.get(CONF_FILE, SECTION, "user");
+		DataBase.host = Config.get(CONF_FILE, SECTION, "host", "localhost");
+		DataBase.port = Config.get(CONF_FILE, SECTION, "port", 3306);
+		DataBase.database = Config.get(CONF_FILE, SECTION, "database", "morgul");
+		DataBase.pass = Config.get(CONF_FILE, SECTION, "pass", "password");
+		DataBase.user = Config.get(CONF_FILE, SECTION, "user", "morgulUser");
 		url = "jdbc:mysql://" + host + ":" + port +"/"+ database;
 		try
 		{

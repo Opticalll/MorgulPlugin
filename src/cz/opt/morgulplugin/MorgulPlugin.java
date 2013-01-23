@@ -1,6 +1,5 @@
 package cz.opt.morgulplugin;
 
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spoutapi.SpoutManager;
 
 import cz.opt.morgulplugin.commands.SocketControl;
 import cz.opt.morgulplugin.commands.Test;
@@ -29,9 +27,9 @@ import cz.opt.morgulplugin.managers.HuntManager;
 import cz.opt.morgulplugin.managers.LanguageManager;
 import cz.opt.morgulplugin.managers.LoginManager;
 import cz.opt.morgulplugin.managers.PlayerManager;
+import cz.opt.morgulplugin.managers.ResourceManager;
 import cz.opt.morgulplugin.managers.SocketManager;
 import cz.opt.morgulplugin.managers.StatManager;
-import cz.opt.morgulplugin.structs.CustomItem;
 
 public final class MorgulPlugin extends JavaPlugin
 {
@@ -61,7 +59,7 @@ public final class MorgulPlugin extends JavaPlugin
 		else
 		{
 			MorgulPlugin.log("Config Loaded.");	
-			debugMode = Boolean.parseBoolean(Config.get(CONF_FILE, SECTION, "debugmode"));
+			debugMode = Config.get(CONF_FILE, SECTION, "debugmode", false);
 			if(!DataBase.setUp())
 			{
 				MorgulPlugin.log("Database could not be SetUp.");
@@ -102,14 +100,18 @@ public final class MorgulPlugin extends JavaPlugin
 			return;
 		}
 		//Item block init must be here.
-		CustomItem.init();
+		ResourceManager.init();
+		MorgulPlugin.log("TextureManager Init.");
+		//here must be all generic items, blocks, armors, weapons, materials, all things which use textures to load extending our custom classes.
 		CoinManager.init();
 		MorgulPlugin.log("CoinManager Init.");
-		CustomItem.setUpCache();
-//		SpoutManager.getFileManager().addToCache(MorgulPlugin.thisPlugin, new File("Morgul/textures/coinExchange.png"));
-		new Test();
-		new SocketControl();
+		//---------
+		ResourceManager.setUpCache();
+		MorgulPlugin.log("TextureManager SetUpCache.");
 		
+		//need some command class
+		new Test();
+		SocketControl.init();
 		
 		this.getServer().getPluginManager().registerEvents(new PlayerEventManager(), this);
 		this.getServer().getPluginManager().registerEvents(new ChatEventManager(), this);

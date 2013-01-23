@@ -41,7 +41,7 @@ public class StatManager implements CommandListener
 		
 		for(int i = 0; i < SECTIONS.length; i++)
 		{
-			confData = Config.get(CONF_FILE, SECTIONS[i], destoyedBlock);
+			confData = Config.get(CONF_FILE, SECTIONS[i], destoyedBlock, null);
 			if(confData != null)
 			{
 				activeSection = SECTIONS[i].toLowerCase();

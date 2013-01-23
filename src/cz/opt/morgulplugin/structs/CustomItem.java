@@ -19,13 +19,11 @@ public class CustomItem extends GenericCustomItem
 	{
 		itemList = new ArrayList<CustomItem>();
 	}
+	
 	public static void setUpCache()
 	{
 		for(int i = 0; i < itemList.size(); i++)
-		{
-			MorgulPlugin.debug("" + itemList.get(i).getTexturePath());
 			SpoutManager.getFileManager().addToCache(MorgulPlugin.thisPlugin, new File(itemList.get(i).getTexturePath()));
-		}
 	}
 	
 	protected String texFileName;
@@ -33,7 +31,6 @@ public class CustomItem extends GenericCustomItem
 	public CustomItem(String name, String texFileName)
 	{
 		super(MorgulPlugin.thisPlugin, name, TEXTUREDIRECTORYPATH + texFileName);
-		MorgulPlugin.debug(name + "--" +TEXTUREDIRECTORYPATH + texFileName);
 		this.texFileName = texFileName;
 		itemList.add(this);
 	}

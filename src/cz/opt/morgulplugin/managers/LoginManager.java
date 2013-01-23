@@ -26,7 +26,7 @@ public class LoginManager implements CommandListener
 	
 	public static void init()
 	{
-		LOGIN_TIMEOUT_SECONDS = Integer.parseInt(Config.get(CONF_FILE, SECTION, "timeout"));
+		LOGIN_TIMEOUT_SECONDS = Config.get(CONF_FILE, SECTION, "timeout", 10);
 	}
 	
 	public static String hashMD5(String pass)

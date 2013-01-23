@@ -34,25 +34,25 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 	
 	public CoinExchange(SpoutPlayer pl)
 	{
-		invWidget = new InventoryWidget(pl, Integer.parseInt(Config.get(CONF_FILE, SECTION, "CoinExchanger_Width")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "CoinExchanger_Height")), this);
+		invWidget = new InventoryWidget(pl, Config.get(CONF_FILE, SECTION, "CoinExchanger_Width", 176), Config.get(CONF_FILE, SECTION, "CoinExchanger_Height", 122), this);
 		widgets = new ArrayList<Widget>();
 		slots = new ArrayList<ActionSlot>();
-		Label label = new Label(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Label_PopupName_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Label_PopupName_Y")), Config.get(CONF_FILE, SECTION, "Label_PopupName_Text"));
+		Label label = new Label(Config.get(CONF_FILE, SECTION, "Label_PopupName_X", 24), Config.get(CONF_FILE, SECTION, "Label_PopupName_Y", 14), Config.get(CONF_FILE, SECTION, "Label_PopupName_Text", "Coin Exchange"));
 		widgets.add(label);
-		ActionSlot slot1 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input1_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input1_Y")), this);
+		ActionSlot slot1 = new ActionSlot(Config.get(CONF_FILE, SECTION, "Slot_Input1_X", 25), Config.get(CONF_FILE, SECTION, "Slot_Input1_Y", 18), this);
 		addSlot(slot1);
-		ActionSlot slot2 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input2_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Input2_Y")), this);
+		ActionSlot slot2 = new ActionSlot(Config.get(CONF_FILE, SECTION, "Slot_Input2_X", 43), Config.get(CONF_FILE, SECTION, "Slot_Input2_Y", 18), this);
 		addSlot(slot2);
-		ActionSlot slot3 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Output1_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Output1_Y")), this);
+		ActionSlot slot3 = new ActionSlot(Config.get(CONF_FILE, SECTION, "Slot_Output1_X", 115), Config.get(CONF_FILE, SECTION, "Slot_Output1_Y", 17), this);
 		slot3.setReadOnly(true);
 		addSlot(slot3);
-		ActionSlot slot4 = new ActionSlot(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Output2_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Slot_Output2_Y")), this);
+		ActionSlot slot4 = new ActionSlot(Config.get(CONF_FILE, SECTION, "Slot_Output2_X", 133), Config.get(CONF_FILE, SECTION, "Slot_Output2_Y", 17), this);
 		slot4.setReadOnly(true);
 		addSlot(slot4);
-		ActionButton but = new ActionButton(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Y")));
-		but.setText(Config.get(CONF_FILE, SECTION, "Button_Exchange_Text"));
-		but.setWidth(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Width")));
-		but.setHeight(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Button_Exchange_Height")));
+		ActionButton but = new ActionButton(Config.get(CONF_FILE, SECTION, "Button_Exchange_X", 75), Config.get(CONF_FILE, SECTION, "Button_Exchange_Y", 10));
+		but.setText(Config.get(CONF_FILE, SECTION, "Button_Exchange_Text", "Exchanger"));
+		but.setWidth(Config.get(CONF_FILE, SECTION, "Button_Exchange_Width", 34));
+		but.setHeight(Config.get(CONF_FILE, SECTION, "Button_Exchange_Height", 10));
 		but.setFixed(true);
 		but.addListener(this);
 		widgets.add(but);
@@ -68,9 +68,14 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 	@Override
 	public Widget getBackground()
 	{
-		return new GenericTexture("Morgul/texture/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround"));
+		return new GenericTexture("Morgul/texture/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround", "coinExchanger.png"));
 	}
 
+	public static String getTextureName()
+	{
+		return "Morgul/texture/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround", "coinExchanger.png");
+	}
+	
 	@Override
 	public ArrayList<Widget> getWidgets()
 	{
@@ -80,7 +85,7 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 	@Override
 	public Point getInventoryOffSet()
 	{
-		return new Point(Integer.parseInt(Config.get(CONF_FILE, SECTION, "Inventory_PlayerInventory_X")), Integer.parseInt(Config.get(CONF_FILE, SECTION, "Inventory_PlayerInventory_Y")));
+		return new Point(Config.get(CONF_FILE, SECTION, "Inventory_PlayerInventory_X", 8), Config.get(CONF_FILE, SECTION, "Inventory_PlayerInventory_Y", 40));
 	}
 
 	@Override
