@@ -25,6 +25,7 @@ public class DataBase
 	static String user;
 	static int port;
 	static String database;
+	//1st commit
 	
 	public static boolean setUp()
 	{
