@@ -68,12 +68,12 @@ public class CoinExchange implements InventoryViewExtention, ActionSlotListener,
 	@Override
 	public Widget getBackground()
 	{
-		return new GenericTexture("Morgul/texture/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround", "coinExchanger.png"));
+		return new GenericTexture("Morgul/textures/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround", "coinExchanger.png"));
 	}
 
 	public static String getTextureName()
 	{
-		return "Morgul/texture/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround", "coinExchanger.png");
+		return "Morgul/textures/" + Config.get(CONF_FILE, SECTION, "CoinExchanger_BackGround", "coinExchanger.png");
 	}
 	
 	@Override
